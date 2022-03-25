@@ -1,7 +1,4 @@
-# /in
-# /out
+/input/*
+/output/*
 
-**/EquipParamProtector.csv
-**/EquipParamWeapon.csv
-**/EquipParamAccessory.csv
-**/SpEffectParam.csv
+/__pycache__

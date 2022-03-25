@@ -1,47 +1,24 @@
 import csv
 import json
 
-IGNORED = [
-    "",
-    "head",
-    "body",
-    "arms",
-    "legs",
-    "travel-hairstyle",
-    "millicents-robe",
-    "millicents-gloves",
-    "millicents-boots",
-    "millicents-tunic",
-    "millicents-robe",
-    "braves-corc-circlet",
-    "braves-battlewear",
-    "braves-battlewear-altered",
-    "braves-bracer",
-    "braves-legwraps",
-    "braves-leather-helm",
-    "ragged-hat",
-    "ragged-hat-altered",
-    "ragged-armor",
-    "ragged-armor-altered",
-    "ragged-gloves",
-    "ragged-loincloth",
-]
+from corrections import IGNORED, MISSING, HELMET_STATS
 
 helmets = []
 chestpieces = []
 gauntlets = []
 leggings = []
 talismans = []
+weapons = []
 
 
 def main():
     # armors
     with open("input/EquipParamProtector.csv") as af:
-        reader = csv.DictReader(af, delimiter=";")
+        reader = list(csv.DictReader(af, delimiter=";"))
 
-        for a in reader:
-            if not ignored(a):
-                armor_piece(a)
+        for armor in reader:
+            if not ignored(armor):
+                process_armor_piece(armor)
 
     # talismans
     with (
@@ -51,28 +28,47 @@ def main():
         effects = list(csv.DictReader(ef, delimiter=";"))
         reader = list(csv.DictReader(tf, delimiter=";"))
 
-        for t in reader:
-            if not ignored(t):
-                talisman(t, effects)
+        for talisman in reader:
+            if not ignored(talisman):
+                process_talisman(talisman, effects)
 
     # add missing items
-    # add_missing_items()
+    for h in MISSING["helmets"]:
+        helmets.append(h)
+    for c in MISSING["chestpieces"]:
+        chestpieces.append(c)
+    for g in MISSING["gauntlets"]:
+        gauntlets.append(g)
+    for l in MISSING["leggings"]:
+        leggings.append(l)
 
     # sort all files
+    helmets.sort(key=lambda item: item["id"])
+    chestpieces.sort(key=lambda item: item["id"])
+    gauntlets.sort(key=lambda item: item["id"])
+    leggings.sort(key=lambda item: item["id"])
 
     # add none cases (no helmet etc.)
+    helmets.insert(0, {"id": "no-helmet", "name": "None"})
+    chestpieces.insert(0, {"id": "no-chestpiece", "name": "None"})
+    gauntlets.insert(0, {"id": "no-gauntlets", "name": "None"})
+    leggings.insert(0, {"id": "no-leggings", "name": "None"})
 
     # save to files
-    with open("output/helmets.json", "w") as hf:
+    with (
+        open("output/helmets.json", "w") as hf,
+        open("output/chestpieces.json", "w") as cf,
+        open("output/gauntlets.json", "w") as gf,
+        open("output/leggings.json", "w") as lf,
+        open("output/talismans.json", "w") as tf,
+        open("output/weapons.json", "w") as wf,
+    ):
         json.dump(helmets, hf)
-    with open("output/chestpieces.json", "w") as cf:
         json.dump(chestpieces, cf)
-    with open("output/gauntlets.json", "w") as gf:
         json.dump(gauntlets, gf)
-    with open("output/leggings.json", "w") as lf:
         json.dump(leggings, lf)
-    with open("output/talismans.json", "w") as tf:
         json.dump(talismans, tf)
+        json.dump(weapons, wf)
 
 
 def ignored(row):
@@ -91,11 +87,14 @@ def to_kebab(name):
     )
 
 
-def armor_piece(row):
+def process_armor_piece(row):
     item = {}
 
+    item["id"] = to_kebab(row["Row Name"])
     item["name"] = row["Row Name"]
-    item["id"] = to_kebab(item["name"])
+
+    if item["id"] in HELMET_STATS:
+        item["stats"] = HELMET_STATS[item["id"]]
 
     item["defenses"] = [
         round((1.0 - float(row["Absorption - Physical"])) * 100.0, 2),
@@ -115,25 +114,24 @@ def armor_piece(row):
         int(row["Resist - Blight"]),
     ]
 
-    item["poise"] = round(float(row["Poise"]) * 1000.0, 2)
+    item["poise"] = int(round(float(row["Poise"]) * 1000.0, 2))
     item["weight"] = round(float(row["Weight"]), 2)
 
-    row_id = int(row["Row ID"])
-    if row_id % 1000 == 0:
+    if row["Is Head Equipment"] == "True":
         helmets.append(item)
-    elif row_id % 1000 == 100:
+    elif row["Is Body Equipment"] == "True":
         chestpieces.append(item)
-    elif row_id % 1000 == 200:
+    elif row["Is Arm Equipment"] == "True":
         gauntlets.append(item)
-    elif row_id % 1000 == 300:
+    elif row["Is Leg Equipment"] == "True":
         leggings.append(item)
 
 
-def talisman(row, effects):
+def process_talisman(row, effects):
     item = {}
 
+    item["id"] = to_kebab(row["Row Name"])
     item["name"] = row["Row Name"]
-    item["id"] = to_kebab(item["name"])
 
     item["weight"] = row["Weight"]
 
@@ -162,10 +160,6 @@ def talisman(row, effects):
                 item.pop("multipliers")
 
     talismans.append(item)
-
-
-def add_missing_items():
-    raise NotImplementedError
 
 
 main()
