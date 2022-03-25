@@ -1,0 +1,519 @@
+[
+    {
+        "name": "Crimson Amber Medallion",
+        "id": "crimson-amber-medallion",
+        "weight": "0.3",
+        "multipliers": [1.06, 1.0, 1.0, 1.0]
+    },
+    {
+        "name": "Crimson Amber Medallion +1",
+        "id": "crimson-amber-medallion-+1",
+        "weight": "0.3",
+        "multipliers": [1.07, 1.0, 1.0, 1.0]
+    },
+    {
+        "name": "Crimson Amber Medallion +2",
+        "id": "crimson-amber-medallion-+2",
+        "weight": "0.3",
+        "multipliers": [1.08, 1.0, 1.0, 1.0]
+    },
+    {
+        "name": "Cerulean Amber Medallion",
+        "id": "cerulean-amber-medallion",
+        "weight": "0.3",
+        "multipliers": [1.0, 1.07, 1.0, 1.0]
+    },
+    {
+        "name": "Cerulean Amber Medallion +1",
+        "id": "cerulean-amber-medallion-+1",
+        "weight": "0.3",
+        "multipliers": [1.0, 1.09, 1.0, 1.0]
+    },
+    {
+        "name": "Cerulean Amber Medallion +2",
+        "id": "cerulean-amber-medallion-+2",
+        "weight": "0.3",
+        "multipliers": [1.0, 1.11, 1.0, 1.0]
+    },
+    {
+        "name": "Viridian Amber Medallion",
+        "id": "viridian-amber-medallion",
+        "weight": "0.3",
+        "multipliers": [1.0, 1.0, 1.11, 1.0]
+    },
+    {
+        "name": "Viridian Amber Medallion +1",
+        "id": "viridian-amber-medallion-+1",
+        "weight": "0.3",
+        "multipliers": [1.0, 1.0, 1.13, 1.0]
+    },
+    {
+        "name": "Viridian Amber Medallion +2",
+        "id": "viridian-amber-medallion-+2",
+        "weight": "0.3",
+        "multipliers": [1.0, 1.0, 1.15, 1.0]
+    },
+    {
+        "name": "Arsenal Charm",
+        "id": "arsenal-charm",
+        "weight": "1.5",
+        "multipliers": [1.0, 1.0, 1.0, 1.15]
+    },
+    {
+        "name": "Arsenal Charm +1",
+        "id": "arsenal-charm-+1",
+        "weight": "1.5",
+        "multipliers": [1.0, 1.0, 1.0, 1.17]
+    },
+    {
+        "name": "Great-Jar's Arsenal",
+        "id": "great-jars-arsenal",
+        "weight": "1.5",
+        "multipliers": [1.0, 1.0, 1.0, 1.19]
+    },
+    {
+        "name": "Erdtree's Favor",
+        "id": "erdtrees-favor",
+        "weight": "1.5",
+        "multipliers": [1.03, 1.0, 1.07, 1.05]
+    },
+    {
+        "name": "Erdtree's Favor +1",
+        "id": "erdtrees-favor-+1",
+        "weight": "1.5",
+        "multipliers": [1.035, 1.0, 1.085, 1.065]
+    },
+    {
+        "name": "Erdtree's Favor +2",
+        "id": "erdtrees-favor-+2",
+        "weight": "1.5",
+        "multipliers": [1.04, 1.0, 1.1, 1.08]
+    },
+    {
+        "name": "Radagon's Scarseal",
+        "id": "radagons-scarseal",
+        "weight": "0.8",
+        "stats": [3, 0, 3, 3, 3, 0, 0, 0]
+    },
+    {
+        "name": "Radagon's Soreseal",
+        "id": "radagons-soreseal",
+        "weight": "0.8",
+        "stats": [5, 0, 5, 5, 5, 0, 0, 0]
+    },
+    {
+        "name": "Starscourge Heirloom",
+        "id": "starscourge-heirloom",
+        "weight": "0.8",
+        "stats": [0, 0, 0, 5, 0, 0, 0, 0]
+    },
+    {
+        "name": "Prosthesis-Wearer Heirloom",
+        "id": "prosthesis-wearer-heirloom",
+        "weight": "0.8",
+        "stats": [0, 0, 0, 0, 5, 0, 0, 0]
+    },
+    {
+        "name": "Stargazer Heirloom",
+        "id": "stargazer-heirloom",
+        "weight": "0.6",
+        "stats": [0, 0, 0, 0, 0, 5, 0, 0]
+    },
+    {
+        "name": "Two Fingers Heirloom",
+        "id": "two-fingers-heirloom",
+        "weight": "0.6",
+        "stats": [0, 0, 0, 0, 0, 0, 5, 0]
+    },
+    { "name": "Silver Scarab", "id": "silver-scarab", "weight": "1.2" },
+    { "name": "Gold Scarab", "id": "gold-scarab", "weight": "1.2" },
+    { "name": "Moon of Nokstella", "id": "moon-of-nokstella", "weight": "0.8" },
+    {
+        "name": "Green Turtle Talisman",
+        "id": "green-turtle-talisman",
+        "weight": "0.7"
+    },
+    {
+        "name": "Stalwart Horn Charm",
+        "id": "stalwart-horn-charm",
+        "weight": "0.6"
+    },
+    {
+        "name": "Stalwart Horn Charm +1",
+        "id": "stalwart-horn-charm-+1",
+        "weight": "0.6"
+    },
+    {
+        "name": "Immunizing Horn Charm",
+        "id": "immunizing-horn-charm",
+        "weight": "0.6"
+    },
+    {
+        "name": "Immunizing Horn Charm +1",
+        "id": "immunizing-horn-charm-+1",
+        "weight": "0.6"
+    },
+    {
+        "name": "Clarifying Horn Charm",
+        "id": "clarifying-horn-charm",
+        "weight": "0.6"
+    },
+    {
+        "name": "Clarifying Horn Charm +1",
+        "id": "clarifying-horn-charm-+1",
+        "weight": "0.6"
+    },
+    {
+        "name": "Prince of Death's Pustule",
+        "id": "prince-of-deaths-pustule",
+        "weight": "0.6"
+    },
+    {
+        "name": "Prince of Death's Cyst",
+        "id": "prince-of-deaths-cyst",
+        "weight": "0.6"
+    },
+    { "name": "Mottled Necklace", "id": "mottled-necklace", "weight": "0.9" },
+    {
+        "name": "Mottled Necklace +1",
+        "id": "mottled-necklace-+1",
+        "weight": "0.9"
+    },
+    {
+        "name": "Bull-Goat's Talisman",
+        "id": "bull-goats-talisman",
+        "weight": "0.5"
+    },
+    {
+        "name": "Marika's Scarseal",
+        "id": "marikas-scarseal",
+        "weight": "0.8",
+        "stats": [0, 3, 0, 0, 0, 3, 3, 3]
+    },
+    {
+        "name": "Marika's Soreseal",
+        "id": "marikas-soreseal",
+        "weight": "0.8",
+        "stats": [0, 5, 0, 0, 0, 5, 5, 5]
+    },
+    { "name": "Warrior Jar Shard", "id": "warrior-jar-shard", "weight": "0.9" },
+    {
+        "name": "Shard of Alexander",
+        "id": "shard-of-alexander",
+        "weight": "0.9"
+    },
+    {
+        "name": "Millicent's Prosthesis",
+        "id": "millicents-prosthesis",
+        "weight": "1.6",
+        "stats": [0, 0, 0, 0, 5, 0, 0, 0]
+    },
+    {
+        "name": "Magic Scorpion Charm",
+        "id": "magic-scorpion-charm",
+        "weight": "0.8"
+    },
+    {
+        "name": "Lightning Scorpion Charm",
+        "id": "lightning-scorpion-charm",
+        "weight": "0.8"
+    },
+    {
+        "name": "Fire Scorpion Charm",
+        "id": "fire-scorpion-charm",
+        "weight": "0.8"
+    },
+    {
+        "name": "Sacred Scorpion Charm",
+        "id": "sacred-scorpion-charm",
+        "weight": "0.8"
+    },
+    {
+        "name": "Red-Feathered Branchsword",
+        "id": "red-feathered-branchsword",
+        "weight": "1.4"
+    },
+    {
+        "name": "Ritual Sword Talisman",
+        "id": "ritual-sword-talisman",
+        "weight": "0.9"
+    },
+    { "name": "Spear Talisman", "id": "spear-talisman", "weight": "0.5" },
+    { "name": "Hammer Talisman", "id": "hammer-talisman", "weight": "0.9" },
+    {
+        "name": "Winged Sword Insignia",
+        "id": "winged-sword-insignia",
+        "weight": "1.4"
+    },
+    {
+        "name": "Rotten Winged Sword Insignia",
+        "id": "rotten-winged-sword-insignia",
+        "weight": "1.4"
+    },
+    { "name": "Dagger Talisman", "id": "dagger-talisman", "weight": "1.1" },
+    {
+        "name": "Arrow's Reach Talisman",
+        "id": "arrows-reach-talisman",
+        "weight": "0.7"
+    },
+    { "name": "Blue Dancer Charm", "id": "blue-dancer-charm", "weight": "0.9" },
+    {
+        "name": "Twinblade Talisman",
+        "id": "twinblade-talisman",
+        "weight": "0.7"
+    },
+    { "name": "Axe Talisman", "id": "axe-talisman", "weight": "0.8" },
+    { "name": "Lance Talisman", "id": "lance-talisman", "weight": "0.7" },
+    {
+        "name": "Arrow's Sting Talisman",
+        "id": "arrows-sting-talisman",
+        "weight": "0.7"
+    },
+    {
+        "name": "Lord of Blood's Exultation",
+        "id": "lord-of-bloods-exultation",
+        "weight": "0.9"
+    },
+    {
+        "name": "Kindred of Rot's Exultation",
+        "id": "kindred-of-rots-exultation",
+        "weight": "0.9"
+    },
+    { "name": "Claw Talisman", "id": "claw-talisman", "weight": "0.7" },
+    { "name": "Roar Medallion", "id": "roar-medallion", "weight": "0.7" },
+    {
+        "name": "Curved Sword Talisman",
+        "id": "curved-sword-talisman",
+        "weight": "0.7"
+    },
+    { "name": "Companion Jar", "id": "companion-jar", "weight": "0.6" },
+    {
+        "name": "Perfumer's Talisman",
+        "id": "perfumers-talisman",
+        "weight": "0.6"
+    },
+    {
+        "name": "Graven-School Talisman",
+        "id": "graven-school-talisman",
+        "weight": "0.7"
+    },
+    {
+        "name": "Graven-Mass Talisman",
+        "id": "graven-mass-talisman",
+        "weight": "1"
+    },
+    {
+        "name": "Faithful's Canvas Talisman",
+        "id": "faithfuls-canvas-talisman",
+        "weight": "0.7"
+    },
+    {
+        "name": "Flock's Canvas Talisman",
+        "id": "flocks-canvas-talisman",
+        "weight": "1"
+    },
+    {
+        "name": "Old Lord's Talisman",
+        "id": "old-lords-talisman",
+        "weight": "0.5"
+    },
+    { "name": "Radagon Icon", "id": "radagon-icon", "weight": "0.7" },
+    {
+        "name": "Primal Glintstone Blade",
+        "id": "primal-glintstone-blade",
+        "weight": "0.6",
+        "multipliers": [0.85, 1.0, 1.0, 1.0]
+    },
+    { "name": "Godfrey Icon", "id": "godfrey-icon", "weight": "0.8" },
+    {
+        "name": "Dragoncrest Shield Talisman",
+        "id": "dragoncrest-shield-talisman",
+        "weight": "0.8"
+    },
+    {
+        "name": "Dragoncrest Shield Talisman +1",
+        "id": "dragoncrest-shield-talisman-+1",
+        "weight": "0.8"
+    },
+    {
+        "name": "Dragoncrest Shield Talisman +2",
+        "id": "dragoncrest-shield-talisman-+2",
+        "weight": "0.8"
+    },
+    {
+        "name": "Dragoncrest Greatshield Talisman",
+        "id": "dragoncrest-greatshield-talisman",
+        "weight": "0.8"
+    },
+    {
+        "name": "Spelldrake Talisman",
+        "id": "spelldrake-talisman",
+        "weight": "0.6"
+    },
+    {
+        "name": "Spelldrake Talisman +1",
+        "id": "spelldrake-talisman-+1",
+        "weight": "0.6"
+    },
+    {
+        "name": "Spelldrake Talisman +2",
+        "id": "spelldrake-talisman-+2",
+        "weight": "0.6"
+    },
+    {
+        "name": "Flamedrake Talisman",
+        "id": "flamedrake-talisman",
+        "weight": "0.6"
+    },
+    {
+        "name": "Flamedrake Talisman +1",
+        "id": "flamedrake-talisman-+1",
+        "weight": "0.6"
+    },
+    {
+        "name": "Flamedrake Talisman +2",
+        "id": "flamedrake-talisman-+2",
+        "weight": "0.6"
+    },
+    {
+        "name": "Boltdrake Talisman",
+        "id": "boltdrake-talisman",
+        "weight": "0.6"
+    },
+    {
+        "name": "Boltdrake Talisman +1",
+        "id": "boltdrake-talisman-+1",
+        "weight": "0.6"
+    },
+    {
+        "name": "Boltdrake Talisman +2",
+        "id": "boltdrake-talisman-+2",
+        "weight": "0.6"
+    },
+    {
+        "name": "Haligdrake Talisman",
+        "id": "haligdrake-talisman",
+        "weight": "0.6"
+    },
+    {
+        "name": "Haligdrake Talisman +1",
+        "id": "haligdrake-talisman-+1",
+        "weight": "0.6"
+    },
+    {
+        "name": "Haligdrake Talisman +2",
+        "id": "haligdrake-talisman-+2",
+        "weight": "0.6"
+    },
+    {
+        "name": "Pearldrake Talisman",
+        "id": "pearldrake-talisman",
+        "weight": "0.9"
+    },
+    {
+        "name": "Pearldrake Talisman +1",
+        "id": "pearldrake-talisman-+1",
+        "weight": "0.9"
+    },
+    {
+        "name": "Pearldrake Talisman +2",
+        "id": "pearldrake-talisman-+2",
+        "weight": "0.9"
+    },
+    {
+        "name": "Crucible Scale Talisman",
+        "id": "crucible-scale-talisman",
+        "weight": "1.1"
+    },
+    {
+        "name": "Crucible Feather Talisman",
+        "id": "crucible-feather-talisman",
+        "weight": "0.8"
+    },
+    {
+        "name": "Blue-Feathered Branchsword",
+        "id": "blue-feathered-branchsword",
+        "weight": "1.1"
+    },
+    {
+        "name": "Ritual Shield Talisman",
+        "id": "ritual-shield-talisman",
+        "weight": "0.9"
+    },
+    {
+        "name": "Greatshield Talisman",
+        "id": "greatshield-talisman",
+        "weight": "0.9"
+    },
+    {
+        "name": "Crucible Knot Talisman",
+        "id": "crucible-knot-talisman",
+        "weight": "0.5"
+    },
+    {
+        "name": "Crimson Seed Talisman",
+        "id": "crimson-seed-talisman",
+        "weight": "0.8"
+    },
+    {
+        "name": "Cerulean Seed Talisman",
+        "id": "cerulean-seed-talisman",
+        "weight": "0.8"
+    },
+    {
+        "name": "Blessed Dew Talisman",
+        "id": "blessed-dew-talisman",
+        "weight": "0.6"
+    },
+    { "name": "Taker's Cameo", "id": "takers-cameo", "weight": "1" },
+    {
+        "name": "Godskin Swaddling Cloth",
+        "id": "godskin-swaddling-cloth",
+        "weight": "0.9"
+    },
+    {
+        "name": "Assassin's Crimson Dagger",
+        "id": "assassins-crimson-dagger",
+        "weight": "0.8"
+    },
+    {
+        "name": "Assassin's Cerulean Dagger",
+        "id": "assassins-cerulean-dagger",
+        "weight": "0.8"
+    },
+    { "name": "Crepus's Vial", "id": "crepuss-vial", "weight": "0.7" },
+    { "name": "Concealing Veil", "id": "concealing-veil", "weight": "0.9" },
+    {
+        "name": "Carian Filigreed Crest",
+        "id": "carian-filigreed-crest",
+        "weight": "0.8"
+    },
+    {
+        "name": "Longtail Cat Talisman",
+        "id": "longtail-cat-talisman",
+        "weight": "0.6"
+    },
+    { "name": "Shabriri's Woe", "id": "shabriris-woe", "weight": "0.6" },
+    { "name": "Daedicar's Woe", "id": "daedicars-woe", "weight": "0.8" },
+    { "name": "Sacrificial Twig", "id": "sacrificial-twig", "weight": "1" },
+    {
+        "name": "Furled Finger's Trick-Mirror",
+        "id": "furled-fingers-trick-mirror",
+        "weight": "0.7"
+    },
+    {
+        "name": "Host's Trick-Mirror",
+        "id": "hosts-trick-mirror",
+        "weight": "0.7"
+    },
+    {
+        "name": "Entwining Umbilical Cord",
+        "id": "entwining-umbilical-cord",
+        "weight": "0.5"
+    },
+    {
+        "name": "Ancestral Spirit's Horn",
+        "id": "ancestral-spirits-horn",
+        "weight": "1.2"
+    }
+]
