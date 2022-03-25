@@ -151,3 +151,5 @@ HELMET_STATS = {
     "twinsage-glintstone-crown": [0, 0, 0, 0, 0, 6, 0, 0],
     "witchs-glintstone-crown": [0, 0, 0, 0, 0, 3, 0, 3],
 }
+
+IGNORED_WEAPON_INFUSIONS = ["heavy-crossbow"]
