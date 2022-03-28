@@ -36,6 +36,7 @@
 -   Damage: `EquipParamWeapon.csv`
 -   Upgrading: `ReinforceParamWeapon.csv`
 -   Scaling: `EquipParamWeapon.csv`
+-   Scaling Corrections: `AttackElementCorrectParam.csv` // TODO
 -   Ash of War: `EquipParamGem.csv`
 
 ### Talismans
@@ -49,3 +50,13 @@
 -   FP cost: `Magic.csv`
 -   Stam. cost: `Magic.csv`
 -   Reqs.: `Magic.csv`
+
+## Correction Formula
+
+**Base Damage**: $base = weaponDamage _ (infusionDamage + upgradeLevel _ infusionUpgrade)
+
+if $stat > cap$:
+
+$$
+growth + (growth - gprev) \cdot \left(\frac{stat - cap}{cnext - cap}\right)^{adj}
+$$

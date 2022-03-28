@@ -1,6 +1,5 @@
 import csv
 import json
-from statistics import mean
 import os
 
 from corrections import IGNORED, IGNORED_WEAPON_INFUSIONS, MISSING, HELMET_STATS
@@ -75,13 +74,23 @@ def main():
             classes.append(c)
 
     # weapons
-    with open("input/EquipParamWeapon.csv") as wf:
+    with (
+        open("input/AttackElementCorrectParam.csv") as af,
+        open("input/EquipParamWeapon.csv") as wf,
+        open("input/CalcCorrectGraph.csv") as cf,
+    ):
         rows = list(csv.DictReader(wf, delimiter=";"))
         rows = [row for row in rows if 1000000 <= int(row["Row ID"]) <= 44010000]
 
+        masks = list(csv.DictReader(af, delimiter=";"))
+        masks = {row["Row ID"]: row for row in masks}
+
+        softcaps = list(csv.DictReader(cf, delimiter=";"))
+        softcaps = {row["Row ID"]: row for row in softcaps}
+
         for row in rows:
             if not ignored(row):
-                process_weapon(row)
+                process_weapon(row, masks, softcaps)
 
     # infusions
     with open("input/ReinforceParamWeapon.csv") as inf:
@@ -99,26 +108,21 @@ def main():
     for l in MISSING["leggings"]:
         leggings.append(l)
 
-    # mark weapons with no infusions as "unique"
-    for weapon in weapons:
-        if weapon["infusions"] == []:
-            weapon["infusions"] = ["unique"]
-
     # sort all files
     helmets.sort(key=lambda item: item["id"])
     chestpieces.sort(key=lambda item: item["id"])
     gauntlets.sort(key=lambda item: item["id"])
     leggings.sort(key=lambda item: item["id"])
-    talismans.sort(key=lambda item: item["id"])
     classes.sort(key=lambda item: item["id"], reverse=True)
     weapons.sort(key=lambda item: item["id"])
-    # infusions.sort(key=lambda item: item["id"])
 
     # add none cases (no helmet etc.)
     helmets.insert(0, {"id": "no-helmet", "name": "None"})
     chestpieces.insert(0, {"id": "no-chestpiece", "name": "None"})
     gauntlets.insert(0, {"id": "no-gauntlets", "name": "None"})
     leggings.insert(0, {"id": "no-leggings", "name": "None"})
+    talismans.insert(0, {"id": "no-talisman", "name": "None"})
+    weapons.insert(0, {"id": "no-weapon", "name": "None"})
 
     # save to files
     with (
@@ -141,7 +145,7 @@ def main():
         json.dump(infusions, inf)
 
     # format output files with prettier
-    if os.system("prettier output --write") != 0:
+    if os.system("prettier output --write --tab-width 4") != 0:
         print(
             "please install prettier (the code formatting tool) to auto-format the output files after generating"
         )
@@ -230,17 +234,21 @@ def process_talisman(row, effects):
                 float(effect["Max Stamina"]),
                 float(effect["Equip Load %"]),
             ]
-            if all(stat == 0.0 for stat in item["stats"]):
-                item.pop("stats")
-            if all(mult == 1.0 for mult in item["multipliers"]):
-                item.pop("multipliers")
+
+    if all(stat == 0.0 for stat in item["stats"]):
+        item.pop("stats")
+    if all(mult == 1.0 for mult in item["multipliers"]):
+        item.pop("multipliers")
 
     talismans.append(item)
 
 
 def split_weapon_name(name):
-    infusion = "none"
+    infusion = "standard"
     for other in INFUSIONS:
+        if "Bloody" in name:
+            name = name.replace("Bloody ", "")
+            infusion = "blood"
         if other in name and not to_kebab(name) in IGNORED_WEAPON_INFUSIONS:
             infusion = other
             name = name.replace(infusion, "")
@@ -248,48 +256,247 @@ def split_weapon_name(name):
     return name.strip().replace("  ", " "), to_kebab(infusion)
 
 
-def process_weapon(row):
+def to_mask(str):
+    if str == "True":
+        return 1
+    else:
+        return 0
+
+
+def process_weapon(row, masks, caps):
     name, infusion = split_weapon_name(row["Row Name"])
     id = to_kebab(name)
 
-    for other in weapons:
-        if other["id"] == id:
-            weapon = other
-            weapon["infusions"].append(infusion)
-
-            return
-
-    weapon = {}
-
-    weapon["id"] = id
-    weapon["name"] = name
-
-    weapon["requirements"] = [
-        int(row["Requirement: STR"]),
-        int(row["Requirement: DEX"]),
-        int(row["Requirement: INT"]),
-        int(row["Requirement: FTH"]),
-        int(row["Requirement: ARC"]),
+    damage = [
+        int(row["Damage: Physical"]),
+        int(row["Damage: Magic"]),
+        int(row["Damage: Fire"]),
+        int(row["Damage: Lightning"]),
+        int(row["Damage: Holy"]),
     ]
 
-    if row["Enables Sorcery"] == "True":
-        weapon["sorcery-catalyst"] = True
-    if row["Enables Incantations"] == "True":
-        weapon["incantation-catalyst"] = True
+    scaling = [
+        float(row["Scaling: STR"]) / 100.0,
+        float(row["Scaling: DEX"]) / 100.0,
+        float(row["Scaling: INT"]) / 100.0,
+        float(row["Scaling: FTH"]) / 100.0,
+        float(row["Scaling: ARC"]) / 100.0,
+    ]
 
-    if infusion == "none":
-        weapon["infusions"] = []
+    mask_id = row["Attack Element Correct ID"]
+    mask_row = masks[mask_id]
+
+    weapon_masks = [
+        [  # physical
+            to_mask(mask_row["Physical Scaling: STR"]),
+            to_mask(mask_row["Physical Scaling: DEX"]),
+            to_mask(mask_row["Physical Scaling: INT"]),
+            to_mask(mask_row["Physical Scaling: FTH"]),
+            to_mask(mask_row["Physical Scaling: ARC"]),
+        ],
+        [  # magic
+            to_mask(mask_row["Magic Scaling: STR"]),
+            to_mask(mask_row["Magic Scaling: DEX"]),
+            to_mask(mask_row["Magic Scaling: INT"]),
+            to_mask(mask_row["Magic Scaling: FTH"]),
+            to_mask(mask_row["Magic Scaling: ARC"]),
+        ],
+        [  # fire
+            to_mask(mask_row["Fire Scaling: STR"]),
+            to_mask(mask_row["Fire Scaling: DEX"]),
+            to_mask(mask_row["Fire Scaling: INT"]),
+            to_mask(mask_row["Fire Scaling: FTH"]),
+            to_mask(mask_row["Fire Scaling: ARC"]),
+        ],
+        [  # lightning
+            to_mask(mask_row["Lightning Scaling: STR"]),
+            to_mask(mask_row["Lightning Scaling: DEX"]),
+            to_mask(mask_row["Lightning Scaling: INT"]),
+            to_mask(mask_row["Lightning Scaling: FTH"]),
+            to_mask(mask_row["Lightning Scaling: ARC"]),
+        ],
+        [  # holy
+            to_mask(mask_row["Holy Scaling: STR"]),
+            to_mask(mask_row["Holy Scaling: DEX"]),
+            to_mask(mask_row["Holy Scaling: INT"]),
+            to_mask(mask_row["Holy Scaling: FTH"]),
+            to_mask(mask_row["Holy Scaling: ARC"]),
+        ],
+    ]
+
+    corrections = [
+        row["Correction Type: Physical"],
+        row["Correction Type: Magic"],
+        row["Correction Type: Fire"],
+        row["Correction Type: Lightning"],
+        row["Correction Type: Holy"],
+    ]
+
+    softcaps = [
+        [  # physical
+            int(caps[corrections[0]]["Stat Max 0"]),
+            int(caps[corrections[0]]["Stat Max 1"]),
+            int(caps[corrections[0]]["Stat Max 2"]),
+            int(caps[corrections[0]]["Stat Max 3"]),
+            int(caps[corrections[0]]["Stat Max 4"]),
+        ],
+        [  # magic
+            int(caps[corrections[1]]["Stat Max 0"]),
+            int(caps[corrections[1]]["Stat Max 1"]),
+            int(caps[corrections[1]]["Stat Max 2"]),
+            int(caps[corrections[1]]["Stat Max 3"]),
+            int(caps[corrections[1]]["Stat Max 4"]),
+        ],
+        [  # fire
+            int(caps[corrections[2]]["Stat Max 0"]),
+            int(caps[corrections[2]]["Stat Max 1"]),
+            int(caps[corrections[2]]["Stat Max 2"]),
+            int(caps[corrections[2]]["Stat Max 3"]),
+            int(caps[corrections[2]]["Stat Max 4"]),
+        ],
+        [  # lightning
+            int(caps[corrections[3]]["Stat Max 0"]),
+            int(caps[corrections[3]]["Stat Max 1"]),
+            int(caps[corrections[3]]["Stat Max 2"]),
+            int(caps[corrections[3]]["Stat Max 3"]),
+            int(caps[corrections[3]]["Stat Max 4"]),
+        ],
+        [  # holy
+            int(caps[corrections[4]]["Stat Max 0"]),
+            int(caps[corrections[4]]["Stat Max 1"]),
+            int(caps[corrections[4]]["Stat Max 2"]),
+            int(caps[corrections[4]]["Stat Max 3"]),
+            int(caps[corrections[4]]["Stat Max 4"]),
+        ],
+    ]
+
+    growth = [
+        [
+            int(caps[corrections[0]]["Grow 0"]),
+            int(caps[corrections[0]]["Grow 1"]),
+            int(caps[corrections[0]]["Grow 2"]),
+            int(caps[corrections[0]]["Grow 3"]),
+            int(caps[corrections[0]]["Grow 4"]),
+        ],
+        [
+            int(caps[corrections[1]]["Grow 0"]),
+            int(caps[corrections[1]]["Grow 1"]),
+            int(caps[corrections[1]]["Grow 2"]),
+            int(caps[corrections[1]]["Grow 3"]),
+            int(caps[corrections[1]]["Grow 4"]),
+        ],
+        [
+            int(caps[corrections[2]]["Grow 0"]),
+            int(caps[corrections[2]]["Grow 1"]),
+            int(caps[corrections[2]]["Grow 2"]),
+            int(caps[corrections[2]]["Grow 3"]),
+            int(caps[corrections[2]]["Grow 4"]),
+        ],
+        [
+            int(caps[corrections[3]]["Grow 0"]),
+            int(caps[corrections[3]]["Grow 1"]),
+            int(caps[corrections[3]]["Grow 2"]),
+            int(caps[corrections[3]]["Grow 3"]),
+            int(caps[corrections[3]]["Grow 4"]),
+        ],
+        [
+            int(caps[corrections[4]]["Grow 0"]),
+            int(caps[corrections[4]]["Grow 1"]),
+            int(caps[corrections[4]]["Grow 2"]),
+            int(caps[corrections[4]]["Grow 3"]),
+            int(caps[corrections[4]]["Grow 4"]),
+        ],
+    ]
+    adjustments = [
+        [
+            float(caps[corrections[0]]["Adjustment Point - Grow 0"]),
+            float(caps[corrections[0]]["Adjustment Point - Grow 1"]),
+            float(caps[corrections[0]]["Adjustment Point - Grow 2"]),
+            float(caps[corrections[0]]["Adjustment Point - Grow 3"]),
+            float(caps[corrections[0]]["Adjustment Point - Grow 4"]),
+        ],
+        [
+            float(caps[corrections[1]]["Adjustment Point - Grow 0"]),
+            float(caps[corrections[1]]["Adjustment Point - Grow 1"]),
+            float(caps[corrections[1]]["Adjustment Point - Grow 2"]),
+            float(caps[corrections[1]]["Adjustment Point - Grow 3"]),
+            float(caps[corrections[1]]["Adjustment Point - Grow 4"]),
+        ],
+        [
+            float(caps[corrections[2]]["Adjustment Point - Grow 0"]),
+            float(caps[corrections[2]]["Adjustment Point - Grow 1"]),
+            float(caps[corrections[2]]["Adjustment Point - Grow 2"]),
+            float(caps[corrections[2]]["Adjustment Point - Grow 3"]),
+            float(caps[corrections[2]]["Adjustment Point - Grow 4"]),
+        ],
+        [
+            float(caps[corrections[3]]["Adjustment Point - Grow 0"]),
+            float(caps[corrections[3]]["Adjustment Point - Grow 1"]),
+            float(caps[corrections[3]]["Adjustment Point - Grow 2"]),
+            float(caps[corrections[3]]["Adjustment Point - Grow 3"]),
+            float(caps[corrections[3]]["Adjustment Point - Grow 4"]),
+        ],
+        [
+            float(caps[corrections[4]]["Adjustment Point - Grow 0"]),
+            float(caps[corrections[4]]["Adjustment Point - Grow 1"]),
+            float(caps[corrections[4]]["Adjustment Point - Grow 2"]),
+            float(caps[corrections[4]]["Adjustment Point - Grow 3"]),
+            float(caps[corrections[4]]["Adjustment Point - Grow 4"]),
+        ],
+    ]
+
+    weapon = {}
+    found = False
+    for other in weapons:
+        if other["id"] == id:
+            found = True
+            weapon = other
+            break
+
+    if found:
+        weapon["infusions"][infusion] = {
+            "damage": damage,
+            "upgrade": scaling,
+            "masks": weapon_masks,
+            "caps": softcaps,
+            "growth": growth,
+            "adjustments": adjustments,
+        }
     else:
-        weapon["infusions"] = [infusion]
+        weapon["id"] = id
+        weapon["name"] = name
 
-    weapons.append(weapon)
+        weapon["requirements"] = [
+            int(row["Requirement: STR"]),
+            int(row["Requirement: DEX"]),
+            int(row["Requirement: INT"]),
+            int(row["Requirement: FTH"]),
+            int(row["Requirement: ARC"]),
+        ]
+
+        if row["Enables Sorcery"] == "True":
+            weapon["sorcery-catalyst"] = True
+        if row["Enables Incantations"] == "True":
+            weapon["incantation-catalyst"] = True
+
+        weapon["infusions"] = {}
+        weapon["infusions"][infusion] = {
+            "damage": damage,
+            "scaling": scaling,
+            "masks": weapon_masks,
+            "caps": softcaps,
+            "growth": growth,
+            "adjustments": adjustments,
+        }
+
+        weapons.append(weapon)
 
 
 def regression(xs, ys):
+    # least-squares sum regression
     n = len(xs)
-
-    xy = sum([x * y for x, y in zip(xs, ys)])
-    xsq = sum([x * x for x in xs])
+    xy = sum([x * y for x, y in zip(xs, ys)])  # sum of all x * y
+    xsq = sum([x * x for x in xs])  # sum of all squared xs
 
     a = (n * xy - sum(xs) * sum(ys)) / (n * xsq - sum(xs) ** 2)
     b = ys[0]
@@ -307,20 +514,33 @@ def extract_infusions(rows):
 
         xs = [x for x in range(0, 26)]
 
-        # damage
+        # damage & upgrade
         physical = [float(relevant[i]["Damage %: Physical"]) for i in range(0, 26)]
-        fire = [float(relevant[i]["Damage %: Fire"]) for i in range(0, 26)]
         magic = [float(relevant[i]["Damage %: Magic"]) for i in range(0, 26)]
+        fire = [float(relevant[i]["Damage %: Fire"]) for i in range(0, 26)]
         lightning = [float(relevant[i]["Damage %: Lightning"]) for i in range(0, 26)]
         holy = [float(relevant[i]["Damage %: Holy"]) for i in range(0, 26)]
 
-        infusion["damage"] = {
-            "physical": regression(xs, physical),
-            "fire": regression(xs, fire),
-            "magic": regression(xs, magic),
-            "lightning": regression(xs, lightning),
-            "holy": regression(xs, holy),
-        }
+        physical_upg, physical_dmg = regression(xs, physical)
+        magic_upg, magic_dmg = regression(xs, magic)
+        fire_upg, fire_dmg = regression(xs, fire)
+        lightning_upg, lightning_dmg = regression(xs, lightning)
+        holy_upg, holy_dmg = regression(xs, holy)
+
+        infusion["damage"] = [
+            physical_dmg,
+            magic_dmg,
+            fire_dmg,
+            lightning_dmg,
+            holy_dmg,
+        ]
+        infusion["upgrade"] = [
+            physical_upg,
+            magic_upg,
+            fire_upg,
+            lightning_upg,
+            holy_upg,
+        ]
 
         # scaling
         strength = [float(relevant[i]["Scaling %: STR"]) for i in range(0, 26)]
@@ -329,13 +549,26 @@ def extract_infusions(rows):
         faith = [float(relevant[i]["Scaling %: FTH"]) for i in range(0, 26)]
         arcane = [float(relevant[i]["Scaling %: ARC"]) for i in range(0, 26)]
 
-        infusion["scaling"] = {
-            "strength": regression(xs, strength),
-            "dexterity": regression(xs, dexterity),
-            "intelligence": regression(xs, intelligence),
-            "faith": regression(xs, faith),
-            "arcane": regression(xs, arcane),
-        }
+        str_growth, str_scaling = regression(xs, strength)
+        dex_growth, dex_scaling = regression(xs, dexterity)
+        int_growth, int_scaling = regression(xs, intelligence)
+        fth_growth, fth_scaling = regression(xs, faith)
+        arc_growth, arc_scaling = regression(xs, arcane)
+
+        infusion["scaling"] = [
+            str_scaling,
+            dex_scaling,
+            int_scaling,
+            fth_scaling,
+            arc_scaling,
+        ]
+        infusion["growth"] = [
+            str_growth,
+            dex_growth,
+            int_growth,
+            fth_growth,
+            arc_growth,
+        ]
 
         infusions.append(infusion)
 
