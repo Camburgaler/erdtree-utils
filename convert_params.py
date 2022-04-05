@@ -261,7 +261,7 @@ def main():
         **talismans,
     }
     weapons = {
-        "no-weapon": {
+        "unarmed": {
             "id": "unarmed",
             "name": "Unarmed",
             "requirements": [0, 0, 0, 0, 0],
