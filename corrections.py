@@ -23,8 +23,8 @@ IGNORED = [
     "ragged-armor-altered",
     "ragged-gloves",
     "ragged-loincloth",
-    "deathbed-smalls"
-    # these items are wrong in the param file
+    "deathbed-smalls",
+    # these items are wrong in the param files
     "ash-of-war-scarab",
     "sanguine-noble-hood",
     "sanguine-noble-robe",
@@ -32,98 +32,106 @@ IGNORED = [
     "sanguine-noble-trousers",
     "fias-robe",
     "fias-robe-altered",
+    "deathbed-dress",
+    "rotten-duelist-greaves",
 ]
 
 # these items are either missing or wrong in the param files
 MISSING = {
-    "helmets": [
-        {
-            "id": "ash-of-war-scarab",
+    "helmets": {
+        "ash-of-war-scarab": {
             "name": "Ash-of-War Scarab",
             "defenses": [-5.8, -5.6, -5.8, -5.8, -4.9, -4.9, -4.9, -5.1],
             "resistances": [42, 22, 27, 26],
             "poise": 2,
             "weight": 5.1,
         },
-        {
-            "id": "godskin-noble-hood",
+        "godskin-noble-hood": {
             "name": "Godskin Noble Hood",
             "defenses": [1.4, 2.8, 1.8, 1.4, 4.5, 4, 4.2, 4.8],
             "resistances": [16, 10, 27, 29],
             "poise": 1,
             "weight": 1.7,
         },
-        {
-            "id": "sanguine-noble-hood",
+        "sanguine-noble-hood": {
             "name": "Sanguine Noble Hood",
             "defenses": [1.4, 0.9, 0.9, 0.9, 4.6, 3.8, 4.5, 4.6],
             "resistances": [18, 5, 29, 27],
             "poise": 0,
             "weight": 1.4,
         },
-    ],
-    "chestpieces": [
-        {
-            "id": "godskin-noble-robe",
+    },
+    "chestpieces": {
+        "godskin-noble-robe": {
             "name": "Godskin Noble Robe",
             "defenses": [6.1, 9.5, 6.7, 6.1, 13, 12.4, 12.6, 14.1],
             "resistances": [46, 25, 76, 83],
             "poise": 5,
             "weight": 6.3,
         },
-        {
-            "id": "sanguine-noble-robe",
+        "sanguine-noble-robe": {
             "name": "Sanguine Noble Robe",
             "defenses": [6.1, 5.3, 5.3, 5.3, 13.3, 11.9, 13.0, 13.5],
             "resistances": [50, 21, 83, 76],
             "poise": 2,
             "weight": 5.1,
         },
-        {
-            "id": "fias-robe",
+        "fias-robe": {
             "name": "Fia's Robe",
             "defenses": [5.3, 6.1, 5.3, 5.3, 12.6, 12.4, 12.6, 13],
             "resistances": [46, 21, 76, 108],
             "poise": 2,
             "weight": 5.1,
         },
-        {
-            "id": "fias-robe",
+        "fias-robe": {
             "name": "Fia's Robe",
             "defenses": [5.3, 6.1, 5.3, 5.3, 12.6, 12.4, 12.6, 13.0],
             "resistances": [46, 21, 76, 108],
             "poise": 2,
             "weight": 5.1,
         },
-        {
-            "id": "fias-robe-altered",
+        "fias-robe-altered": {
             "name": "Fia's Robe (Altered)",
             "defenses": [2.7, 4.2, 2.7, 2.7, 11.9, 11.4, 11.9, 12.6],
             "resistances": [34, 10, 57, 93],
             "poise": 0,
             "weight": 3.2,
         },
-    ],
-    "gauntlets": [
-        {
-            "id": "godskin-noble-bracelets",
+        "deathbed-dress": {
+            "id": "deathbed-dress",
+            "name": "Deathbed Dress",
+            "defenses": [0.6, 2.7, 0.6, 0.6, 11.9, 11.4, 11.9, 12.4],
+            "resistances": [38, 11, 63, 107],
+            "poise": 1,
+            "weight": 3.2,
+        },
+    },
+    "gauntlets": {
+        "godskin-noble-bracelets": {
             "name": "Godskin Noble Bracelets",
             "defenses": [1.3, 2.1, 1.5, 1.3, 3.2, 2.9, 3.1, 3.4],
             "resistances": [14, 8, 24, 25],
             "poise": 1,
             "weight": 1.7,
         },
-    ],
-    "leggings": [
-        {
-            "id": "godskin-noble-trousers",
+    },
+    "leggings": {
+        "godskin-noble-trousers": {
             "name": "Godskin Noble Trousers",
             "defenses": [2.3, 4.5, 3, 2.3, 7.2, 6.5, 6.8, 7.7],
             "resistances": [24, 14, 39, 41],
             "poise": 1,
             "weight": 2.5,
         },
-    ],
+        "rotten-duelist-greaves": {
+            "id": "rotten-duelist-greaves",
+            "name": "Rotten Duelist Greaves",
+            "defenses": [7.4, 6.2, 7.7, 7.1, 6.2, 6.5, 5.8, 6.2],
+            "resistances": [35, 35, 15, 15],
+            "poise": 10,
+            "weight": 7.3,
+        },
+    },
 }
 
 # until i find where this is located in the param files, this is the workaround
@@ -152,4 +160,9 @@ HELMET_STATS = {
     "witchs-glintstone-crown": [0, 0, 0, 0, 0, 3, 0, 3],
 }
 
-IGNORED_WEAPON_INFUSIONS = ["heavy-crossbow"]
+IGNORED_WEAPON_INFUSIONS = [
+    "heavy-crossbow",
+    "bloody-helice",
+    "mohgwyns-sacred-spear",
+    "sacred-relic-sword",
+]
