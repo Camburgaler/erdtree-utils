@@ -165,4 +165,6 @@ IGNORED_WEAPON_INFUSIONS = [
     "bloody-helice",
     "mohgwyns-sacred-spear",
     "sacred-relic-sword",
+    "treespear",
+    "serpentbone-blade",
 ]

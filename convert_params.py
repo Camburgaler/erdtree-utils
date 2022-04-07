@@ -222,7 +222,7 @@ def main():
     }
     chestpieces = {
         "no-chestpiece": {
-            "id": "no-chestpieces",
+            "id": "no-chestpiece",
             "name": "No chestpiece",
             "defenses": [0, 0, 0, 0, 0, 0, 0, 0],
             "resistances": [0, 0, 0, 0],
@@ -255,7 +255,7 @@ def main():
     }
     talismans = {
         "no-talisman": {
-            "id": "no-talismans",
+            "id": "no-talisman",
             "name": "No talisman",
         },
         **talismans,
@@ -265,6 +265,7 @@ def main():
             "id": "unarmed",
             "name": "Unarmed",
             "requirements": [0, 0, 0, 0, 0],
+            "category": "fist",
             "unique": False,
             "infusions": {
                 "standard": {
@@ -499,13 +500,14 @@ def process_weapon(row, masks, caps):
     ]
 
     if id in weapons:
-        weapon = weapons[id]
-        weapon["infusions"][infusion] = {
-            "damage": damage,
-            "upgrade": scaling,
-            "masks": weapon_masks,
-            "corrections": corrections,
-        }
+        if not id in IGNORED_WEAPON_INFUSIONS:
+            weapon = weapons[id]
+            weapon["infusions"][infusion] = {
+                "damage": damage,
+                "scaling": scaling,
+                "masks": weapon_masks,
+                "corrections": corrections,
+            }
         return
     else:
         weapon = {}
