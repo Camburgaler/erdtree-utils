@@ -380,7 +380,7 @@ def process_talisman(row, effects):
 
     item["weight"] = row["Weight"]
 
-    effect_id = row["SpEffect ID 1"]
+    effect_id = row["SpEffect ID [0]"]
     for effect in effects:
         if effect["Row ID"] == effect_id:
             item["stats"] = [
@@ -443,11 +443,11 @@ def process_weapon(row, masks, caps):
     ]
 
     scaling = [
-        float(row["Scaling: STR"]) / 100.0,
-        float(row["Scaling: DEX"]) / 100.0,
-        float(row["Scaling: INT"]) / 100.0,
-        float(row["Scaling: FTH"]) / 100.0,
-        float(row["Scaling: ARC"]) / 100.0,
+        float(row["Correction: STR"]) / 100.0,
+        float(row["Correction: DEX"]) / 100.0,
+        float(row["Correction: INT"]) / 100.0,
+        float(row["Correction: FTH"]) / 100.0,
+        float(row["Correction: ARC"]) / 100.0,
     ]
 
     mask_id = row["Attack Element Correct ID"]
@@ -455,39 +455,39 @@ def process_weapon(row, masks, caps):
 
     weapon_masks = [
         [  # physical
-            to_mask(mask_row["Physical Scaling: STR"]),
-            to_mask(mask_row["Physical Scaling: DEX"]),
-            to_mask(mask_row["Physical Scaling: INT"]),
-            to_mask(mask_row["Physical Scaling: FTH"]),
-            to_mask(mask_row["Physical Scaling: ARC"]),
+            to_mask(mask_row["Physical Correction: STR"]),
+            to_mask(mask_row["Physical Correction: DEX"]),
+            to_mask(mask_row["Physical Correction: INT"]),
+            to_mask(mask_row["Physical Correction: FTH"]),
+            to_mask(mask_row["Physical Correction: ARC"]),
         ],
         [  # magic
-            to_mask(mask_row["Magic Scaling: STR"]),
-            to_mask(mask_row["Magic Scaling: DEX"]),
-            to_mask(mask_row["Magic Scaling: INT"]),
-            to_mask(mask_row["Magic Scaling: FTH"]),
-            to_mask(mask_row["Magic Scaling: ARC"]),
+            to_mask(mask_row["Magic Correction: STR"]),
+            to_mask(mask_row["Magic Correction: DEX"]),
+            to_mask(mask_row["Magic Correction: INT"]),
+            to_mask(mask_row["Magic Correction: FTH"]),
+            to_mask(mask_row["Magic Correction: ARC"]),
         ],
         [  # fire
-            to_mask(mask_row["Fire Scaling: STR"]),
-            to_mask(mask_row["Fire Scaling: DEX"]),
-            to_mask(mask_row["Fire Scaling: INT"]),
-            to_mask(mask_row["Fire Scaling: FTH"]),
-            to_mask(mask_row["Fire Scaling: ARC"]),
+            to_mask(mask_row["Fire Correction: STR"]),
+            to_mask(mask_row["Fire Correction: DEX"]),
+            to_mask(mask_row["Fire Correction: INT"]),
+            to_mask(mask_row["Fire Correction: FTH"]),
+            to_mask(mask_row["Fire Correction: ARC"]),
         ],
         [  # lightning
-            to_mask(mask_row["Lightning Scaling: STR"]),
-            to_mask(mask_row["Lightning Scaling: DEX"]),
-            to_mask(mask_row["Lightning Scaling: INT"]),
-            to_mask(mask_row["Lightning Scaling: FTH"]),
-            to_mask(mask_row["Lightning Scaling: ARC"]),
+            to_mask(mask_row["Lightning Correction: STR"]),
+            to_mask(mask_row["Lightning Correction: DEX"]),
+            to_mask(mask_row["Lightning Correction: INT"]),
+            to_mask(mask_row["Lightning Correction: FTH"]),
+            to_mask(mask_row["Lightning Correction: ARC"]),
         ],
         [  # holy
-            to_mask(mask_row["Holy Scaling: STR"]),
-            to_mask(mask_row["Holy Scaling: DEX"]),
-            to_mask(mask_row["Holy Scaling: INT"]),
-            to_mask(mask_row["Holy Scaling: FTH"]),
-            to_mask(mask_row["Holy Scaling: ARC"]),
+            to_mask(mask_row["Holy Correction: STR"]),
+            to_mask(mask_row["Holy Correction: DEX"]),
+            to_mask(mask_row["Holy Correction: INT"]),
+            to_mask(mask_row["Holy Correction: FTH"]),
+            to_mask(mask_row["Holy Correction: ARC"]),
         ],
     ]
 
@@ -499,6 +499,8 @@ def process_weapon(row, masks, caps):
         row["Correction Type: Holy"],
     ]
 
+    buffable = "True" in row["Is Buffable"]
+
     if id in weapons:
         if not id in IGNORED_WEAPON_INFUSIONS:
             weapon = weapons[id]
@@ -507,6 +509,7 @@ def process_weapon(row, masks, caps):
                 "scaling": scaling,
                 "masks": weapon_masks,
                 "corrections": corrections,
+                "buffable": buffable,
             }
         return
     else:
@@ -536,6 +539,7 @@ def process_weapon(row, masks, caps):
             "scaling": scaling,
             "masks": weapon_masks,
             "corrections": corrections,
+            "buffable": buffable,
         }
 
         weapons[id] = weapon
@@ -594,11 +598,11 @@ def extract_infusions(rows):
         ]
 
         # scaling
-        strength = [float(relevant[i]["Scaling %: STR"]) for i in range(0, 26)]
-        dexterity = [float(relevant[i]["Scaling %: DEX"]) for i in range(0, 26)]
-        intelligence = [float(relevant[i]["Scaling %: INT"]) for i in range(0, 26)]
-        faith = [float(relevant[i]["Scaling %: FTH"]) for i in range(0, 26)]
-        arcane = [float(relevant[i]["Scaling %: ARC"]) for i in range(0, 26)]
+        strength = [float(relevant[i]["Correction %: STR"]) for i in range(0, 26)]
+        dexterity = [float(relevant[i]["Correction %: DEX"]) for i in range(0, 26)]
+        intelligence = [float(relevant[i]["Correction %: INT"]) for i in range(0, 26)]
+        faith = [float(relevant[i]["Correction %: FTH"]) for i in range(0, 26)]
+        arcane = [float(relevant[i]["Correction %: ARC"]) for i in range(0, 26)]
 
         str_growth, str_scaling = regression(xs, strength)
         dex_growth, dex_scaling = regression(xs, dexterity)
