@@ -169,6 +169,7 @@ def main():
         open("input/AttackElementCorrectParam.csv") as af,
         open("input/EquipParamWeapon.csv") as wf,
         open("input/CalcCorrectGraph.csv") as cf,
+        open("input/SpEffectParam.csv") as sf,
     ):
 
         rows = list(csv.DictReader(wf, delimiter=";"))
@@ -182,9 +183,12 @@ def main():
             row["Row ID"]: row for row in softcaps if 0 <= int(row["Row ID"]) <= 16
         }
 
+        effects = list(csv.DictReader(sf, delimiter=";"))
+        effects = {row["Row ID"]: row for row in effects}
+
         for row in rows:
             if not ignored(row):
-                process_weapon(row, masks, softcaps)
+                process_weapon(row, masks, effects)
 
         process_damage(softcaps)
 
@@ -430,7 +434,7 @@ def to_mask(str):
         return 0
 
 
-def process_weapon(row, masks, caps):
+def process_weapon(row, masks, effects):
     name, infusion = split_weapon_name(row["Row Name"])
     id = to_kebab(name)
 
@@ -501,12 +505,68 @@ def process_weapon(row, masks, caps):
 
     buffable = "True" in row["Is Buffable"]
 
+    # Auxiliary Effects (blood, poison)
+    aux = {}
+    for aux_id in [row["Behavior SpEffect 1"], row["Behavior SpEffect 2"]]:
+        if int(aux_id) != -1 and int(aux_id) > 100000:
+            aux_name = effects[aux_id]["Row Name"]
+            xs = [x for x in range(0, 26)]
+            ys = [effects[str(int(aux_id) + x)] for x in xs]
+
+            if "Hemorrhage" in aux_name:
+                ty = "bleed"
+                ys = [int(y["Inflict Hemorrhage +"]) for y in ys]
+            elif "Frostbite" in aux_name:
+                ty = "frost"
+                ys = [int(y["Inflict Frostbite +"]) for y in ys]
+            elif "Poison" in aux_name:
+                ty = "poison"
+                ys = [int(y["Inflict Poison +"]) for y in ys]
+            elif "Scarlet Rot" in aux_name:
+                ty = "scarlet_rot"
+                ys = [int(y["Inflict Scarlet Rot +"]) for y in ys]
+            elif "Madness" in aux_name:
+                ty = "madness"
+                ys = [int(y["Inflict Madness +"]) for y in ys]
+            elif "Sleep" in aux_name:
+                ty = "sleep"
+                ys = [int(y["Inflict Sleep +"]) for y in ys]
+            elif "Blight" in aux_name:
+                ty = "blight"
+                ys = [int(y["Inflict Blight +"]) for y in ys]
+            aux[ty] = regression(xs, ys)
+        elif int(aux_id) != -1 and int(aux_id) <= 100000:
+            aux_name = effects[aux_id]["Row Name"]
+            if "Hemorrhage" in aux_name:
+                ty = "bleed"
+                base = effects[aux_id]["Inflict Hemorrhage +"]
+            elif "Frostbite" in aux_name:
+                ty = "frost"
+                base = effects[aux_id]["Inflict Frostbite +"]
+            elif "Poison" in aux_name:
+                ty = "poison"
+                base = effects[aux_id]["Inflict Poison +"]
+            elif "Scarlet Rot" in aux_name:
+                ty = "scarlet_rot"
+                base = effects[aux_id]["Inflict Scarlet Rot +"]
+            elif "Madness" in aux_name:
+                ty = "madness"
+                base = effects[aux_id]["Inflict Madness +"]
+            elif "Sleep" in aux_name:
+                ty = "sleep"
+                base = effects[aux_id]["Inflict Sleep +"]
+            elif "Blight" in aux_name:
+                ty = "blight"
+                base = effects[aux_id]["Inflict Blight +"]
+            aux[ty] = [0.0, aux_name]
+
     if id in weapons:
         if not id in IGNORED_WEAPON_INFUSIONS:
             weapon = weapons[id]
             weapon["infusions"][infusion] = {
                 "damage": damage,
                 "scaling": scaling,
+                "aux": aux,
                 "masks": weapon_masks,
                 "corrections": corrections,
                 "buffable": buffable,
@@ -537,6 +597,7 @@ def process_weapon(row, masks, caps):
         weapon["infusions"][infusion] = {
             "damage": damage,
             "scaling": scaling,
+            "aux": aux,
             "masks": weapon_masks,
             "corrections": corrections,
             "buffable": buffable,
