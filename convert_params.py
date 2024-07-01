@@ -55,6 +55,14 @@ WEAPON_CATEGORIES = {
     42: "greatbow",
     43: "crossbow",
     44: "ballista",
+    60: "hand-to-hand-art",
+    61: "perfume-bottle",
+    62: "thrusting-shield",
+    63: "throwing-blade",
+    64: "backhand-blade",
+    66: "great-katana",
+    67: "light-greatsword",
+    68: "beast-claw",
 }
 
 
