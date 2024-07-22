@@ -1,8 +1,25 @@
 import csv
 import json
+import logging
 import os
+import sys
 
-from corrections import IGNORED, IGNORED_WEAPON_INFUSIONS, MISSING, HELMET_STATS
+from corrections import (HELMET_STATS, IGNORED, IGNORED_WEAPON_INFUSIONS,
+                         MISSING)
+
+open('tmp.log', 'w').close()
+file_handler = logging.FileHandler(filename='tmp.log')
+stdout_handler = logging.StreamHandler(stream=sys.stdout)
+handlers = [file_handler, stdout_handler]
+
+logging.basicConfig(
+    level=logging.DEBUG, 
+    format='[%(asctime)s] {%(filename)s:%(lineno)d} %(levelname)s - %(message)s',
+    handlers=handlers
+)
+
+logger = logging.getLogger('DEBUG')
+logger.info( 'Logging now setup.' )
 
 INFUSIONS = [
     "Standard ",
@@ -89,7 +106,7 @@ def main():
 
     # armors
     with open("input/EquipParamProtector.csv") as af:
-        rows = list(csv.DictReader(af, delimiter=";"))
+        rows = list(csv.DictReader(af, delimiter=","))
 
         for armor in rows:
             if not ignored(armor):
@@ -101,8 +118,8 @@ def main():
         open("input/SpEffectParam.csv") as ef,
     ):
 
-        effects = list(csv.DictReader(ef, delimiter=";"))
-        rows = list(csv.DictReader(tf, delimiter=";"))
+        effects = list(csv.DictReader(ef, delimiter=","))
+        rows = list(csv.DictReader(tf, delimiter=","))
 
         for talisman in rows:
             if not ignored(talisman):
@@ -180,19 +197,19 @@ def main():
         open("input/SpEffectParam.csv") as sf,
     ):
 
-        rows = list(csv.DictReader(wf, delimiter=";"))
-        rows = [row for row in rows if 1000000 <= int(row["Row ID"]) <= 44010000]
+        rows = list(csv.DictReader(wf, delimiter=","))
+        rows = [row for row in rows if 1000000 <= int(row["ID"]) <= 44010000 or 60500000 <= int(row["ID"]) <= 68510000]
 
-        masks = list(csv.DictReader(af, delimiter=";"))
-        masks = {row["Row ID"]: row for row in masks}
+        masks = list(csv.DictReader(af, delimiter=","))
+        masks = {row["ID"]: row for row in masks}
 
-        softcaps = list(csv.DictReader(cf, delimiter=";"))
+        softcaps = list(csv.DictReader(cf, delimiter=","))
         softcaps = {
-            row["Row ID"]: row for row in softcaps if 0 <= int(row["Row ID"]) <= 16
+            row["ID"]: row for row in softcaps if 0 <= int(row["ID"]) <= 16
         }
 
-        effects = list(csv.DictReader(sf, delimiter=";"))
-        effects = {row["Row ID"]: row for row in effects}
+        effects = list(csv.DictReader(sf, delimiter=","))
+        effects = {row["ID"]: row for row in effects}
 
         for row in rows:
             if not ignored(row):
@@ -202,7 +219,7 @@ def main():
 
     # infusions
     with open("input/ReinforceParamWeapon.csv") as inf:
-        rows = list(csv.DictReader(inf, delimiter=";"))
+        rows = list(csv.DictReader(inf, delimiter=","))
 
         extract_infusions(rows)
 
@@ -226,7 +243,7 @@ def main():
             "id": "no-helmet",
             "name": "No helmet",
             "defenses": [0, 0, 0, 0, 0, 0, 0, 0],
-            "resistances": [0, 0, 0, 0],
+            "resistances": [0, 0, 0, 0, 0, 0, 0, 0],
             "poise": 0,
             "weight": 0,
         },
@@ -237,7 +254,7 @@ def main():
             "id": "no-chestpiece",
             "name": "No chestpiece",
             "defenses": [0, 0, 0, 0, 0, 0, 0, 0],
-            "resistances": [0, 0, 0, 0],
+            "resistances": [0, 0, 0, 0, 0, 0, 0, 0],
             "poise": 0,
             "weight": 0,
         },
@@ -248,7 +265,7 @@ def main():
             "id": "no-gauntlets",
             "name": "No gauntlets",
             "defenses": [0, 0, 0, 0, 0, 0, 0, 0],
-            "resistances": [0, 0, 0, 0],
+            "resistances": [0, 0, 0, 0, 0, 0, 0, 0],
             "poise": 0,
             "weight": 0,
         },
@@ -259,7 +276,7 @@ def main():
             "id": "no-leggings",
             "name": "No leggings",
             "defenses": [0, 0, 0, 0, 0, 0, 0, 0],
-            "resistances": [0, 0, 0, 0],
+            "resistances": [0, 0, 0, 0, 0, 0, 0, 0],
             "poise": 0,
             "weight": 0,
         },
@@ -327,7 +344,7 @@ def main():
 
 
 def ignored(row):
-    id = to_kebab(row["Row Name"])
+    id = to_kebab(row["Name"])
     return id.startswith("type-") or id in IGNORED
 
 
@@ -345,71 +362,74 @@ def to_kebab(name):
 def process_armor_piece(row):
     item = {}
 
-    id = to_kebab(row["Row Name"])
+    id = to_kebab(row["Name"])
     item["id"] = id
-    item["name"] = row["Row Name"]
+    item["name"] = row["Name"]
 
     if id in HELMET_STATS:
         item["stats"] = HELMET_STATS[id]
 
     item["defenses"] = [
-        round((1.0 - float(row["Absorption - Physical"])) * 100.0, 2),
-        round((1.0 - float(row["Absorption - Strike"])) * 100.0, 2),
-        round((1.0 - float(row["Absorption - Slash"])) * 100.0, 2),
-        round((1.0 - float(row["Absorption - Thrust"])) * 100.0, 2),
-        round((1.0 - float(row["Absorption - Magic"])) * 100.0, 2),
-        round((1.0 - float(row["Absorption - Fire"])) * 100.0, 2),
-        round((1.0 - float(row["Absorption - Lightning"])) * 100.0, 2),
-        round((1.0 - float(row["Absorption - Holy"])) * 100.0, 2),
+        round((1.0 - float(row["neutralDamageCutRate"])) * 100.0, 2), # Physical Absorption
+        round((1.0 - float(row["blowDamageCutRate"])) * 100.0, 2), # Strike Absorption
+        round((1.0 - float(row["slashDamageCutRate"])) * 100.0, 2), # Slash Absorption
+        round((1.0 - float(row["thrustDamageCutRate"])) * 100.0, 2), # Thrust Absorption
+        round((1.0 - float(row["magicDamageCutRate"])) * 100.0, 2), # Magic Absorption
+        round((1.0 - float(row["fireDamageCutRate"])) * 100.0, 2), # Fire Absorption
+        round((1.0 - float(row["thunderDamageCutRate"])) * 100.0, 2), # Lightning Absorption
+        round((1.0 - float(row["darkDamageCutRate"])) * 100.0, 2), # Holy Absorption
     ]
 
     item["resistances"] = [
-        int(row["Resist - Scarlet Rot"]),
-        int(row["Resist - Hemorrhage"]),
-        int(row["Resist - Sleep"]),
-        int(row["Resist - Blight"]),
+        int(row["resistDisease"]), # Scarlet Rot Resistance
+        int(row["resistPoison"]), # Poison Resistance
+        int(row["resistBlood"]), # Hemorrhage Resistance
+        int(row["resistFreeze"]), # Freeze Resistance
+        int(row["resistSleep"]), # Sleep Resistance
+        int(row["resistMadness"]), # Madness Resistance
+        int(row["resistCurse"]), # Death Blight Resistance
     ]
 
-    item["poise"] = int(round(float(row["Poise"]) * 1000.0, 2))
-    item["weight"] = round(float(row["Weight"]), 2)
+    item["poise"] = int(round(float(row["toughnessCorrectRate"]) * 1000.0, 2)) # Poise
+    item["weight"] = round(float(row["weight"]), 2)
 
-    if row["Is Head Equipment"] == "True":
+    if row["headEquip"] == '1':
         helmets[id] = item
-    elif row["Is Body Equipment"] == "True":
+    elif row["bodyEquip"] == '1':
         chestpieces[id] = item
-    elif row["Is Arm Equipment"] == "True":
+    elif row["armEquip"] == '1':
         gauntlets[id] = item
-    elif row["Is Leg Equipment"] == "True":
+    elif row["legEquip"] == '1':
         leggings[id] = item
 
 
 def process_talisman(row, effects):
     item = {}
 
-    id = to_kebab(row["Row Name"])
+    id = to_kebab(row["Name"])
     item["id"] = id
-    item["name"] = row["Row Name"]
+    item["name"] = row["Name"]
 
-    item["weight"] = row["Weight"]
+    item["weight"] = row["weight"]
 
-    effect_id = row["SpEffect ID [0]"]
+    effect_id = row["refId"]
     for effect in effects:
-        if effect["Row ID"] == effect_id:
+        if effect["ID"] == effect_id:
             item["stats"] = [
-                int(effect["Vigor"]),
-                int(effect["Mind"]),
-                int(effect["Endurance"]),
-                int(effect["Strength"]),
-                int(effect["Dexterity"]),
-                int(effect["Intelligence"]),
-                int(effect["Faith"]),
-                int(effect["Arcane"]),
+                int(effect["addLifeForceStatus"]), # Vigor
+                int(effect["addWillpowerStatus"]), # Mind
+                int(effect["addEndureStatus"]), # Endurance
+                int(effect["addStrengthStatus"]), # Strength
+                int(effect["addDexterityStatus"]), # Dexterity
+                int(effect["addMagicStatus"]), # Intelligence
+                int(effect["addFaithStatus"]), # Faith
+                int(effect["addLuckStatus"]), # Arcane
             ]
             item["multipliers"] = [
-                float(effect["Max HP"]),
-                float(effect["Max FP"]),
-                float(effect["Max Stamina"]),
-                float(effect["Equip Load %"]),
+                float(effect["maxHpRate"]), # Max HP
+                float(effect["maxMpRate"]), # Max FP
+                float(effect["maxStaminaRate"]), # Max Stamina
+                float(effect["equipWeightChangeRate"]), # Equip Load
             ]
 
     if all(stat == 0.0 for stat in item["stats"]):
@@ -436,136 +456,152 @@ def split_weapon_name(name):
 
 
 def to_mask(str):
-    if str == "True":
+    if str == "1":
         return 1
     else:
         return 0
 
 
 def process_weapon(row, masks, effects):
-    name, infusion = split_weapon_name(row["Row Name"])
+    name, infusion = split_weapon_name(row["Name"])
     id = to_kebab(name)
 
     damage = [
-        int(row["Damage: Physical"]),
-        int(row["Damage: Magic"]),
-        int(row["Damage: Fire"]),
-        int(row["Damage: Lightning"]),
-        int(row["Damage: Holy"]),
+        int(row["attackBasePhysics"]), # Physical
+        int(row["attackBaseMagic"]), # Magic
+        int(row["attackBaseFire"]), # Fire
+        int(row["attackBaseThunder"]), # Lightning
+        int(row["attackBaseDark"]), # Holy
     ]
 
     scaling = [
-        float(row["Correction: STR"]) / 100.0,
-        float(row["Correction: DEX"]) / 100.0,
-        float(row["Correction: INT"]) / 100.0,
-        float(row["Correction: FTH"]) / 100.0,
-        float(row["Correction: ARC"]) / 100.0,
+        float(row["correctStrength"]) / 100.0, # STR
+        float(row["correctAgility"]) / 100.0, # DEX
+        float(row["correctMagic"]) / 100.0, # INT
+        float(row["correctFaith"]) / 100.0, # FTH
+        float(row["correctLuck"]) / 100.0, # ARC
     ]
 
-    mask_id = row["Attack Element Correct ID"]
+    mask_id = row["attackElementCorrectId"]
     mask_row = masks[mask_id]
 
     weapon_masks = [
-        [  # physical
-            to_mask(mask_row["Physical Correction: STR"]),
-            to_mask(mask_row["Physical Correction: DEX"]),
-            to_mask(mask_row["Physical Correction: INT"]),
-            to_mask(mask_row["Physical Correction: FTH"]),
-            to_mask(mask_row["Physical Correction: ARC"]),
+        [  # Does Physical Damage Scale With...
+            to_mask(mask_row["isStrengthCorrect_byPhysics"]), # STR
+            to_mask(mask_row["isDexterityCorrect_byPhysics"]), # DEX
+            to_mask(mask_row["isMagicCorrect_byPhysics"]), # INT
+            to_mask(mask_row["isFaithCorrect_byPhysics"]), # FTH
+            to_mask(mask_row["isLuckCorrect_byPhysics"]), # ARC
         ],
-        [  # magic
-            to_mask(mask_row["Magic Correction: STR"]),
-            to_mask(mask_row["Magic Correction: DEX"]),
-            to_mask(mask_row["Magic Correction: INT"]),
-            to_mask(mask_row["Magic Correction: FTH"]),
-            to_mask(mask_row["Magic Correction: ARC"]),
+        [  # Does Magic Damage Scale With...
+            to_mask(mask_row["isStrengthCorrect_byMagic"]), # STR
+            to_mask(mask_row["isDexterityCorrect_byMagic"]), # DEX
+            to_mask(mask_row["isMagicCorrect_byMagic"]), # INT
+            to_mask(mask_row["isFaithCorrect_byMagic"]), # FTH
+            to_mask(mask_row["isLuckCorrect_byMagic"]), # ARC
         ],
-        [  # fire
-            to_mask(mask_row["Fire Correction: STR"]),
-            to_mask(mask_row["Fire Correction: DEX"]),
-            to_mask(mask_row["Fire Correction: INT"]),
-            to_mask(mask_row["Fire Correction: FTH"]),
-            to_mask(mask_row["Fire Correction: ARC"]),
+        [  # Does Fire Damage Scale With...
+            to_mask(mask_row["isStrengthCorrect_byFire"]), # STR
+            to_mask(mask_row["isDexterityCorrect_byFire"]), # DEX
+            to_mask(mask_row["isMagicCorrect_byFire"]), # INT
+            to_mask(mask_row["isFaithCorrect_byFire"]), # FTH
+            to_mask(mask_row["isLuckCorrect_byFire"]), # ARC
         ],
-        [  # lightning
-            to_mask(mask_row["Lightning Correction: STR"]),
-            to_mask(mask_row["Lightning Correction: DEX"]),
-            to_mask(mask_row["Lightning Correction: INT"]),
-            to_mask(mask_row["Lightning Correction: FTH"]),
-            to_mask(mask_row["Lightning Correction: ARC"]),
+        [  # Does Lightning Damage Scale With...
+            to_mask(mask_row["isStrengthCorrect_byThunder"]), # STR
+            to_mask(mask_row["isDexterityCorrect_byThunder"]), # DEX
+            to_mask(mask_row["isMagicCorrect_byThunder"]), # INT
+            to_mask(mask_row["isFaithCorrect_byThunder"]), # FTH
+            to_mask(mask_row["isLuckCorrect_byThunder"]), # ARC
         ],
-        [  # holy
-            to_mask(mask_row["Holy Correction: STR"]),
-            to_mask(mask_row["Holy Correction: DEX"]),
-            to_mask(mask_row["Holy Correction: INT"]),
-            to_mask(mask_row["Holy Correction: FTH"]),
-            to_mask(mask_row["Holy Correction: ARC"]),
+        [  # Does Holy Damage Scale With...
+            to_mask(mask_row["isStrengthCorrect_byDark"]), # STR
+            to_mask(mask_row["isDexterityCorrect_byDark"]), # DEX
+            to_mask(mask_row["isMagicCorrect_byDark"]), # INT
+            to_mask(mask_row["isFaithCorrect_byDark"]), # FTH
+            to_mask(mask_row["isLuckCorrect_byDark"]), # ARC
         ],
     ]
 
     corrections = [
-        row["Correction Type: Physical"],
-        row["Correction Type: Magic"],
-        row["Correction Type: Fire"],
-        row["Correction Type: Lightning"],
-        row["Correction Type: Holy"],
+        row["correctType_Physics"],
+        row["correctType_Magic"],
+        row["correctType_Fire"],
+        row["correctType_Thunder"],
+        row["correctType_Dark"],
+        row["correctType_Poison"],
+        row["correctType_Blood"],
+        row["correctType_Sleep"],
+        row["correctType_Madness"],
     ]
 
-    buffable = "True" in row["Is Buffable"]
+    buffable = '0' in row["disableGemAttr"]
 
     # Auxiliary Effects (blood, poison)
     aux = {}
-    for aux_id in [row["Behavior SpEffect 1"], row["Behavior SpEffect 2"]]:
-        if int(aux_id) != -1 and int(aux_id) > 100000:
-            aux_name = effects[aux_id]["Row Name"]
+    for aux_id in [row["spEffectBehaviorId0"], row["spEffectBehaviorId1"]]:
+        if int(aux_id) != -1 and int(aux_id) > 5000000:
+            aux_name = effects[aux_id]["Name"]
+            if "Hemorrhage" in aux_name:
+                aux["bleed"] = aux_id
+            elif "Frostbite" in aux_name:
+                aux["frost"] = aux_id
+            elif "Poison" in aux_name:
+                aux["poison"] = aux_id
+            elif "Scarlet Rot" in aux_name:
+                aux["scarlet_rot"] = aux_id
+            elif "Madness" in aux_name:
+                aux["madness"] = aux_id
+        elif int(aux_id) != -1 and int(aux_id) > 100000:
+            aux_name = effects[aux_id]["Name"]
             xs = [x for x in range(0, 26)]
             ys = [effects[str(int(aux_id) + x)] for x in xs]
 
             if "Hemorrhage" in aux_name:
                 ty = "bleed"
-                ys = [int(y["Inflict Hemorrhage +"]) for y in ys]
+                ys = [int(y["bloodDefDamageRate"]) for y in ys]
             elif "Frostbite" in aux_name:
                 ty = "frost"
-                ys = [int(y["Inflict Frostbite +"]) for y in ys]
+                ys = [int(y["freezeDefDamageRate"]) for y in ys]
             elif "Poison" in aux_name:
                 ty = "poison"
-                ys = [int(y["Inflict Poison +"]) for y in ys]
+                ys = [int(y["poisonDefDamageRate"]) for y in ys]
             elif "Scarlet Rot" in aux_name:
                 ty = "scarlet_rot"
-                ys = [int(y["Inflict Scarlet Rot +"]) for y in ys]
+                ys = [int(y["diseaseDefDamageRate"]) for y in ys]
             elif "Madness" in aux_name:
                 ty = "madness"
-                ys = [int(y["Inflict Madness +"]) for y in ys]
+                ys = [int(y["madnessDefDamageRate"]) for y in ys]
             elif "Sleep" in aux_name:
                 ty = "sleep"
-                ys = [int(y["Inflict Sleep +"]) for y in ys]
+                ys = [int(y["sleepDefDamageRate"]) for y in ys]
             elif "Blight" in aux_name:
                 ty = "blight"
-                ys = [int(y["Inflict Blight +"]) for y in ys]
+                ys = [int(y["curseDefDamageRate"]) for y in ys]
             aux[ty] = regression(xs, ys)
         elif int(aux_id) != -1 and int(aux_id) <= 100000:
-            aux_name = effects[aux_id]["Row Name"]
+            aux_name = effects[aux_id]["Name"]
             if "Hemorrhage" in aux_name:
                 ty = "bleed"
-                base = effects[aux_id]["Inflict Hemorrhage +"]
+                # base = effects[aux_id]["Inflict Hemorrhage +"]
             elif "Frostbite" in aux_name:
                 ty = "frost"
-                base = effects[aux_id]["Inflict Frostbite +"]
+                # base = effects[aux_id]["Inflict Frostbite +"]
             elif "Poison" in aux_name:
                 ty = "poison"
-                base = effects[aux_id]["Inflict Poison +"]
+                # base = effects[aux_id]["Inflict Poison +"]
             elif "Scarlet Rot" in aux_name:
                 ty = "scarlet_rot"
-                base = effects[aux_id]["Inflict Scarlet Rot +"]
+                # base = effects[aux_id]["Inflict Scarlet Rot +"]
             elif "Madness" in aux_name:
                 ty = "madness"
-                base = effects[aux_id]["Inflict Madness +"]
+                # base = effects[aux_id]["Inflict Madness +"]
             elif "Sleep" in aux_name:
                 ty = "sleep"
-                base = effects[aux_id]["Inflict Sleep +"]
+                # base = effects[aux_id]["Inflict Sleep +"]
             elif "Blight" in aux_name:
                 ty = "blight"
-                base = effects[aux_id]["Inflict Blight +"]
+                # base = effects[aux_id]["Inflict Blight +"]
             aux[ty] = [0.0, aux_name]
 
     if id in weapons:
@@ -577,7 +613,7 @@ def process_weapon(row, masks, effects):
                 "aux": aux,
                 "masks": weapon_masks,
                 "corrections": corrections,
-                "buffable": buffable,
+                "buffable": True if buffable and infusion in ["standard", "heavy", "keen", "quality"] else False,
             }
         return
     else:
@@ -587,16 +623,16 @@ def process_weapon(row, masks, effects):
         weapon["name"] = name
 
         weapon["requirements"] = [
-            int(row["Requirement: STR"]),
-            int(row["Requirement: DEX"]),
-            int(row["Requirement: INT"]),
-            int(row["Requirement: FTH"]),
-            int(row["Requirement: ARC"]),
+            int(row["properStrength"]), # STR
+            int(row["properAgility"]), # DEX
+            int(row["properMagic"]), # INT
+            int(row["properFaith"]), # FTH
+            int(row["properLuck"]), # ARC
         ]
 
-        weapon["category"] = WEAPON_CATEGORIES[int(row["Row ID"]) // 1000000]
+        weapon["category"] = WEAPON_CATEGORIES[int(row["ID"]) // 1000000]
 
-        if int(row["Reinforcement Material Set ID"]) == 2200:
+        if int(row["reinforceTypeId"]) == 2200:
             weapon["unique"] = True
         else:
             weapon["unique"] = False
@@ -639,11 +675,11 @@ def extract_infusions(rows):
         xs = [x for x in range(0, 26)]
 
         # damage & upgrade
-        physical = [float(relevant[i]["Damage %: Physical"]) for i in range(0, 26)]
-        magic = [float(relevant[i]["Damage %: Magic"]) for i in range(0, 26)]
-        fire = [float(relevant[i]["Damage %: Fire"]) for i in range(0, 26)]
-        lightning = [float(relevant[i]["Damage %: Lightning"]) for i in range(0, 26)]
-        holy = [float(relevant[i]["Damage %: Holy"]) for i in range(0, 26)]
+        physical = [float(relevant[i]["physicsAtkRate"]) for i in range(0, 26)]
+        magic = [float(relevant[i]["magicAtkRate"]) for i in range(0, 26)]
+        fire = [float(relevant[i]["fireAtkRate"]) for i in range(0, 26)]
+        lightning = [float(relevant[i]["thunderAtkRate"]) for i in range(0, 26)]
+        holy = [float(relevant[i]["darkAtkRate"]) for i in range(0, 26)]
 
         physical_upg, physical_dmg = regression(xs, physical)
         magic_upg, magic_dmg = regression(xs, magic)
@@ -667,11 +703,11 @@ def extract_infusions(rows):
         ]
 
         # scaling
-        strength = [float(relevant[i]["Correction %: STR"]) for i in range(0, 26)]
-        dexterity = [float(relevant[i]["Correction %: DEX"]) for i in range(0, 26)]
-        intelligence = [float(relevant[i]["Correction %: INT"]) for i in range(0, 26)]
-        faith = [float(relevant[i]["Correction %: FTH"]) for i in range(0, 26)]
-        arcane = [float(relevant[i]["Correction %: ARC"]) for i in range(0, 26)]
+        strength = [float(relevant[i]["correctStrengthRate"]) for i in range(0, 26)]
+        dexterity = [float(relevant[i]["correctAgilityRate"]) for i in range(0, 26)]
+        intelligence = [float(relevant[i]["correctMagicRate"]) for i in range(0, 26)]
+        faith = [float(relevant[i]["correctFaithRate"]) for i in range(0, 26)]
+        arcane = [float(relevant[i]["correctLuckRate"]) for i in range(0, 26)]
 
         str_growth, str_scaling = regression(xs, strength)
         dex_growth, dex_scaling = regression(xs, dexterity)
@@ -701,120 +737,120 @@ def process_damage(caps):
     for row in caps.values():
         calculation = {}
 
-        id = row["Row ID"]
+        id = row["ID"]
         calculation["id"] = id
 
         calculation["softcaps"] = [
             [  # physical
-                int(row["Stat Max 0"]),
-                int(row["Stat Max 1"]),
-                int(row["Stat Max 2"]),
-                int(row["Stat Max 3"]),
-                int(row["Stat Max 4"]),
+                int(row["stageMaxVal0"]),
+                int(row["stageMaxVal1"]),
+                int(row["stageMaxVal2"]),
+                int(row["stageMaxVal3"]),
+                int(row["stageMaxVal4"]),
             ],
             [  # magic
-                int(row["Stat Max 0"]),
-                int(row["Stat Max 1"]),
-                int(row["Stat Max 2"]),
-                int(row["Stat Max 3"]),
-                int(row["Stat Max 4"]),
+                int(row["stageMaxVal0"]),
+                int(row["stageMaxVal1"]),
+                int(row["stageMaxVal2"]),
+                int(row["stageMaxVal3"]),
+                int(row["stageMaxVal4"]),
             ],
             [  # fire
-                int(row["Stat Max 0"]),
-                int(row["Stat Max 1"]),
-                int(row["Stat Max 2"]),
-                int(row["Stat Max 3"]),
-                int(row["Stat Max 4"]),
+                int(row["stageMaxVal0"]),
+                int(row["stageMaxVal1"]),
+                int(row["stageMaxVal2"]),
+                int(row["stageMaxVal3"]),
+                int(row["stageMaxVal4"]),
             ],
             [  # lightning
-                int(row["Stat Max 0"]),
-                int(row["Stat Max 1"]),
-                int(row["Stat Max 2"]),
-                int(row["Stat Max 3"]),
-                int(row["Stat Max 4"]),
+                int(row["stageMaxVal0"]),
+                int(row["stageMaxVal1"]),
+                int(row["stageMaxVal2"]),
+                int(row["stageMaxVal3"]),
+                int(row["stageMaxVal4"]),
             ],
             [  # holy
-                int(row["Stat Max 0"]),
-                int(row["Stat Max 1"]),
-                int(row["Stat Max 2"]),
-                int(row["Stat Max 3"]),
-                int(row["Stat Max 4"]),
+                int(row["stageMaxVal0"]),
+                int(row["stageMaxVal1"]),
+                int(row["stageMaxVal2"]),
+                int(row["stageMaxVal3"]),
+                int(row["stageMaxVal4"]),
             ],
         ]
 
         calculation["growth"] = [
             [
-                int(row["Grow 0"]),
-                int(row["Grow 1"]),
-                int(row["Grow 2"]),
-                int(row["Grow 3"]),
-                int(row["Grow 4"]),
+                int(row["stageMaxGrowVal0"]),
+                int(row["stageMaxGrowVal1"]),
+                int(row["stageMaxGrowVal2"]),
+                int(row["stageMaxGrowVal3"]),
+                int(row["stageMaxGrowVal4"]),
             ],
             [
-                int(row["Grow 0"]),
-                int(row["Grow 1"]),
-                int(row["Grow 2"]),
-                int(row["Grow 3"]),
-                int(row["Grow 4"]),
+                int(row["stageMaxGrowVal0"]),
+                int(row["stageMaxGrowVal1"]),
+                int(row["stageMaxGrowVal2"]),
+                int(row["stageMaxGrowVal3"]),
+                int(row["stageMaxGrowVal4"]),
             ],
             [
-                int(row["Grow 0"]),
-                int(row["Grow 1"]),
-                int(row["Grow 2"]),
-                int(row["Grow 3"]),
-                int(row["Grow 4"]),
+                int(row["stageMaxGrowVal0"]),
+                int(row["stageMaxGrowVal1"]),
+                int(row["stageMaxGrowVal2"]),
+                int(row["stageMaxGrowVal3"]),
+                int(row["stageMaxGrowVal4"]),
             ],
             [
-                int(row["Grow 0"]),
-                int(row["Grow 1"]),
-                int(row["Grow 2"]),
-                int(row["Grow 3"]),
-                int(row["Grow 4"]),
+                int(row["stageMaxGrowVal0"]),
+                int(row["stageMaxGrowVal1"]),
+                int(row["stageMaxGrowVal2"]),
+                int(row["stageMaxGrowVal3"]),
+                int(row["stageMaxGrowVal4"]),
             ],
             [
-                int(row["Grow 0"]),
-                int(row["Grow 1"]),
-                int(row["Grow 2"]),
-                int(row["Grow 3"]),
-                int(row["Grow 4"]),
+                int(row["stageMaxGrowVal0"]),
+                int(row["stageMaxGrowVal1"]),
+                int(row["stageMaxGrowVal2"]),
+                int(row["stageMaxGrowVal3"]),
+                int(row["stageMaxGrowVal4"]),
             ],
         ]
 
         calculation["adjustments"] = [
             [
-                float(row["Adjustment Point - Grow 0"]),
-                float(row["Adjustment Point - Grow 1"]),
-                float(row["Adjustment Point - Grow 2"]),
-                float(row["Adjustment Point - Grow 3"]),
-                float(row["Adjustment Point - Grow 4"]),
+                float(row["adjPt_maxGrowVal0"]),
+                float(row["adjPt_maxGrowVal1"]),
+                float(row["adjPt_maxGrowVal2"]),
+                float(row["adjPt_maxGrowVal3"]),
+                float(row["adjPt_maxGrowVal4"]),
             ],
             [
-                float(row["Adjustment Point - Grow 0"]),
-                float(row["Adjustment Point - Grow 1"]),
-                float(row["Adjustment Point - Grow 2"]),
-                float(row["Adjustment Point - Grow 3"]),
-                float(row["Adjustment Point - Grow 4"]),
+                float(row["adjPt_maxGrowVal0"]),
+                float(row["adjPt_maxGrowVal1"]),
+                float(row["adjPt_maxGrowVal2"]),
+                float(row["adjPt_maxGrowVal3"]),
+                float(row["adjPt_maxGrowVal4"]),
             ],
             [
-                float(row["Adjustment Point - Grow 0"]),
-                float(row["Adjustment Point - Grow 1"]),
-                float(row["Adjustment Point - Grow 2"]),
-                float(row["Adjustment Point - Grow 3"]),
-                float(row["Adjustment Point - Grow 4"]),
+                float(row["adjPt_maxGrowVal0"]),
+                float(row["adjPt_maxGrowVal1"]),
+                float(row["adjPt_maxGrowVal2"]),
+                float(row["adjPt_maxGrowVal3"]),
+                float(row["adjPt_maxGrowVal4"]),
             ],
             [
-                float(row["Adjustment Point - Grow 0"]),
-                float(row["Adjustment Point - Grow 1"]),
-                float(row["Adjustment Point - Grow 2"]),
-                float(row["Adjustment Point - Grow 3"]),
-                float(row["Adjustment Point - Grow 4"]),
+                float(row["adjPt_maxGrowVal0"]),
+                float(row["adjPt_maxGrowVal1"]),
+                float(row["adjPt_maxGrowVal2"]),
+                float(row["adjPt_maxGrowVal3"]),
+                float(row["adjPt_maxGrowVal4"]),
             ],
             [
-                float(row["Adjustment Point - Grow 0"]),
-                float(row["Adjustment Point - Grow 1"]),
-                float(row["Adjustment Point - Grow 2"]),
-                float(row["Adjustment Point - Grow 3"]),
-                float(row["Adjustment Point - Grow 4"]),
+                float(row["adjPt_maxGrowVal0"]),
+                float(row["adjPt_maxGrowVal1"]),
+                float(row["adjPt_maxGrowVal2"]),
+                float(row["adjPt_maxGrowVal3"]),
+                float(row["adjPt_maxGrowVal4"]),
             ],
         ]
 
