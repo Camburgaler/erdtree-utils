@@ -4,8 +4,7 @@ import logging
 import os
 import sys
 
-from corrections import (HELMET_STATS, IGNORED, IGNORED_WEAPON_INFUSIONS,
-                         MISSING)
+from corrections import IGNORED, IGNORED_WEAPON_INFUSIONS, MISSING, STAT_BUFFS
 
 open('tmp.log', 'w').close()
 file_handler = logging.FileHandler(filename='tmp.log')
@@ -131,61 +130,61 @@ def main():
             "id": "vagabond",
             "name": "Vagabond",
             "level": 9,
-            "stats": [15, 10, 11, 14, 13, 9, 9, 7],
+            "stats": {"VIG": 15, "MND": 10, "END": 11, "STR": 14, "DEX": 13, "INT": 9, "FTH": 9, "ARC": 7},
         },
         {
             "id": "warrior",
             "name": "Warrior",
             "level": 8,
-            "stats": [11, 12, 11, 10, 16, 10, 8, 9],
+            "stats": {"VIG": 11, "MND": 12, "END": 11, "STR": 10, "DEX": 16, "INT": 10, "FTH": 8, "ARC": 9},
         },
         {
             "id": "hero",
             "name": "Hero",
             "level": 7,
-            "stats": [14, 9, 12, 16, 9, 7, 8, 11],
+            "stats": {"VIG": 14, "MND": 9, "END": 12, "STR": 16, "DEX": 9, "INT": 7, "FTH": 8, "ARC": 11},
         },
         {
             "id": "bandit",
             "name": "Bandit",
             "level": 5,
-            "stats": [10, 11, 10, 9, 13, 9, 8, 14],
+            "stats": {"VIG": 10, "MND": 11, "END": 10, "STR": 9, "DEX": 13, "INT": 9, "FTH": 8, "ARC": 14},
         },
         {
             "id": "astrologer",
             "name": "Astrologer",
             "level": 6,
-            "stats": [9, 15, 9, 8, 12, 16, 7, 9],
+            "stats": {"VIG": 9, "MND": 15, "END": 9, "STR": 8, "DEX": 12, "INT": 16, "FTH": 7, "ARC": 9},
         },
         {
             "id": "prophet",
             "name": "Prophet",
             "level": 7,
-            "stats": [10, 14, 8, 11, 10, 7, 16, 10],
+            "stats": {"VIG": 10, "MND": 14, "END": 8, "STR": 11, "DEX": 10, "INT": 7, "FTH": 16, "ARC": 10},
         },
         {
             "id": "samurai",
             "name": "Samurai",
             "level": 9,
-            "stats": [12, 11, 13, 12, 15, 9, 8, 8],
+            "stats": {"VIG": 12, "MND": 11, "END": 13, "STR": 12, "DEX": 15, "INT": 9, "FTH": 8, "ARC": 8},
         },
         {
             "id": "prisoner",
             "name": "Prisoner",
             "level": 9,
-            "stats": [11, 12, 11, 11, 14, 14, 6, 9],
+            "stats": {"VIG": 11, "MND": 12, "END": 11, "STR": 11, "DEX": 14, "INT": 14, "FTH": 6, "ARC": 9},
         },
         {
             "id": "confessor",
             "name": "Confessor",
             "level": 10,
-            "stats": [10, 13, 10, 12, 12, 9, 14, 9],
+            "stats": {"VIG": 10, "MND": 13, "END": 10, "STR": 12, "DEX": 12, "INT": 9, "FTH": 14, "ARC": 9},
         },
         {
             "id": "wretch",
             "name": "Wretch",
             "level": 1,
-            "stats": [10, 10, 10, 10, 10, 10, 10, 10],
+            "stats": {"VIG": 10, "MND": 10, "END": 10, "STR": 10, "DEX": 10, "INT": 10, "FTH": 10, "ARC": 10},
         },
     ]
 
@@ -242,8 +241,8 @@ def main():
         "no-helmet": {
             "id": "no-helmet",
             "name": "No helmet",
-            "defenses": [0, 0, 0, 0, 0, 0, 0, 0],
-            "resistances": [0, 0, 0, 0, 0, 0, 0, 0],
+            "defenses": {"physical": 0, "strike": 0, "slash": 0, "pierce": 0, "magic": 0, "fire": 0, "lightning": 0, "holy": 0},
+            "resistances": {"poison": 0, "scarletRot": 0, "hemorrhage": 0, "frostbite": 0, "sleep": 0, "madness": 0, "deathBlight": 0},
             "poise": 0,
             "weight": 0,
         },
@@ -253,8 +252,8 @@ def main():
         "no-chestpiece": {
             "id": "no-chestpiece",
             "name": "No chestpiece",
-            "defenses": [0, 0, 0, 0, 0, 0, 0, 0],
-            "resistances": [0, 0, 0, 0, 0, 0, 0, 0],
+            "defenses": {"physical": 0, "strike": 0, "slash": 0, "pierce": 0, "magic": 0, "fire": 0, "lightning": 0, "holy": 0},
+            "resistances": {"poison": 0, "scarletRot": 0, "hemorrhage": 0, "frostbite": 0, "sleep": 0, "madness": 0, "deathBlight": 0},
             "poise": 0,
             "weight": 0,
         },
@@ -264,8 +263,8 @@ def main():
         "no-gauntlets": {
             "id": "no-gauntlets",
             "name": "No gauntlets",
-            "defenses": [0, 0, 0, 0, 0, 0, 0, 0],
-            "resistances": [0, 0, 0, 0, 0, 0, 0, 0],
+            "defenses": {"physical": 0, "strike": 0, "slash": 0, "pierce": 0, "magic": 0, "fire": 0, "lightning": 0, "holy": 0},
+            "resistances": {"poison": 0, "scarletRot": 0, "hemorrhage": 0, "frostbite": 0, "sleep": 0, "madness": 0, "deathBlight": 0},
             "poise": 0,
             "weight": 0,
         },
@@ -275,8 +274,8 @@ def main():
         "no-leggings": {
             "id": "no-leggings",
             "name": "No leggings",
-            "defenses": [0, 0, 0, 0, 0, 0, 0, 0],
-            "resistances": [0, 0, 0, 0, 0, 0, 0, 0],
+            "defenses": {"physical": 0, "strike": 0, "slash": 0, "pierce": 0, "magic": 0, "fire": 0, "lightning": 0, "holy": 0},
+            "resistances": {"poison": 0, "scarletRot": 0, "hemorrhage": 0, "frostbite": 0, "sleep": 0, "madness": 0, "deathBlight": 0},
             "poise": 0,
             "weight": 0,
         },
@@ -293,21 +292,68 @@ def main():
         "unarmed": {
             "id": "unarmed",
             "name": "Unarmed",
-            "requirements": [0, 0, 0, 0, 0],
+            "requirements": {"STR": 0, "DEX": 0, "INT": 0, "FTH": 0, "ARC": 0},
             "category": "fist",
             "unique": False,
             "infusions": {
                 "standard": {
-                    "damage": [20, 0, 0, 0, 0],
-                    "scaling": [0.5, 0.5, 0.0, 0.0, 0.0],
-                    "masks": [
-                        [1, 1, 0, 0, 0],
-                        [0, 0, 1, 0, 0],
-                        [0, 0, 0, 1, 0],
-                        [0, 1, 0, 0, 0],
-                        [0, 0, 0, 1, 0],
-                    ],
-                    "corrections": ["0", "0", "0", "0", "0"],
+                    "id": "standard",
+                    "damage": {
+                        "physical": 20,
+                        "magic": 0,
+                        "fire": 0,
+                        "lightning": 0,
+                        "holy": 0
+                    },
+                    "scaling": {
+                        "STR": 0.5,
+                        "DEX": 0.5,
+                        "INT": 0.0,
+                        "FTH": 0.0,
+                        "ARC": 0.0
+                    },
+                "masks": {
+                    "physical": {
+                        "STR": 1,
+                        "DEX": 1,
+                        "INT": 0,
+                        "FTH": 0,
+                        "ARC": 0
+                    },
+                    "magic": {
+                        "STR": 0,
+                        "DEX": 0,
+                        "INT": 1,
+                        "FTH": 0,
+                        "ARC": 0
+                    },
+                    "fire": {
+                        "STR": 0,
+                        "DEX": 0,
+                        "INT": 0,
+                        "FTH": 1,
+                        "ARC": 0
+                    },
+                    "lightning": {
+                        "STR": 0,
+                        "DEX": 1,
+                        "INT": 0,
+                        "FTH": 0,
+                        "ARC": 0
+                    },
+                    "holy": { "STR": 0, "DEX": 0, "INT": 0, "FTH": 1, "ARC": 0 }
+                },
+                "corrections": {
+                    "physical": "0",
+                    "magic": "0",
+                    "fire": "0",
+                    "lightning": "0",
+                    "holy": "0",
+                    "poison": "0",
+                    "bleed": "0",
+                    "sleep": "0",
+                    "madness": "0"
+                },
                 }
             },
         },
@@ -366,29 +412,27 @@ def process_armor_piece(row):
     item["id"] = id
     item["name"] = row["Name"]
 
-    if id in HELMET_STATS:
-        item["stats"] = HELMET_STATS[id]
+    if id in STAT_BUFFS:
+        item["stats"] = STAT_BUFFS[id]
 
-    item["defenses"] = [
-        round((1.0 - float(row["neutralDamageCutRate"])) * 100.0, 2), # Physical Absorption
-        round((1.0 - float(row["blowDamageCutRate"])) * 100.0, 2), # Strike Absorption
-        round((1.0 - float(row["slashDamageCutRate"])) * 100.0, 2), # Slash Absorption
-        round((1.0 - float(row["thrustDamageCutRate"])) * 100.0, 2), # Thrust Absorption
-        round((1.0 - float(row["magicDamageCutRate"])) * 100.0, 2), # Magic Absorption
-        round((1.0 - float(row["fireDamageCutRate"])) * 100.0, 2), # Fire Absorption
-        round((1.0 - float(row["thunderDamageCutRate"])) * 100.0, 2), # Lightning Absorption
-        round((1.0 - float(row["darkDamageCutRate"])) * 100.0, 2), # Holy Absorption
-    ]
+    item["defenses"] = {};
+    item["defenses"]["physical"] = round((1.0 - float(row["neutralDamageCutRate"])) * 100.0, 2); # Physical Absorption
+    item["defenses"]["slash"] = round((1.0 - float(row["slashDamageCutRate"])) * 100.0, 2); # Slash Absorption
+    item["defenses"]["strike"] = round((1.0 - float(row["blowDamageCutRate"])) * 100.0, 2); # Strike Absorption
+    item["defenses"]["pierce"] = round((1.0 - float(row["thrustDamageCutRate"])) * 100.0, 2); # Pierce Absorption
+    item["defenses"]["magic"] = round((1.0 - float(row["magicDamageCutRate"])) * 100.0, 2); # Magic Absorption
+    item["defenses"]["fire"] = round((1.0 - float(row["fireDamageCutRate"])) * 100.0, 2); # Fire Absorption
+    item["defenses"]["lightning"] = round((1.0 - float(row["thunderDamageCutRate"])) * 100.0, 2); # Lightning Absorption
+    item["defenses"]["holy"] = round((1.0 - float(row["darkDamageCutRate"])) * 100.0, 2); # Holy Absorption
 
-    item["resistances"] = [
-        int(row["resistDisease"]), # Scarlet Rot Resistance
-        int(row["resistPoison"]), # Poison Resistance
-        int(row["resistBlood"]), # Hemorrhage Resistance
-        int(row["resistFreeze"]), # Freeze Resistance
-        int(row["resistSleep"]), # Sleep Resistance
-        int(row["resistMadness"]), # Madness Resistance
-        int(row["resistCurse"]), # Death Blight Resistance
-    ]
+    item["resistances"] = {};
+    item["resistances"]["scarletRot"] = int(row["resistDisease"]); # Scarlet Rot Resistance
+    item["resistances"]["poison"] = int(row["resistPoison"]); # Poison Resistance
+    item["resistances"]["hemorrhage"] = int(row["resistBlood"]); # Hemorrhage Resistance
+    item["resistances"]["frostbite"] = int(row["resistFreeze"]); # Frostbite Resistance
+    item["resistances"]["sleep"] = int(row["resistSleep"]); # Sleep Resistance
+    item["resistances"]["madness"] = int(row["resistMadness"]); # Madness Resistance
+    item["resistances"]["deathBlight"] = int(row["resistCurse"]); # Death Blight Resistance
 
     item["poise"] = int(round(float(row["toughnessCorrectRate"]) * 1000.0, 2)) # Poise
     item["weight"] = round(float(row["weight"]), 2)
@@ -415,24 +459,30 @@ def process_talisman(row, effects):
     effect_id = row["refId"]
     for effect in effects:
         if effect["ID"] == effect_id:
-            item["stats"] = [
-                int(effect["addLifeForceStatus"]), # Vigor
-                int(effect["addWillpowerStatus"]), # Mind
-                int(effect["addEndureStatus"]), # Endurance
-                int(effect["addStrengthStatus"]), # Strength
-                int(effect["addDexterityStatus"]), # Dexterity
-                int(effect["addMagicStatus"]), # Intelligence
-                int(effect["addFaithStatus"]), # Faith
-                int(effect["addLuckStatus"]), # Arcane
-            ]
-            item["multipliers"] = [
-                float(effect["maxHpRate"]), # Max HP
-                float(effect["maxMpRate"]), # Max FP
-                float(effect["maxStaminaRate"]), # Max Stamina
-                float(effect["equipWeightChangeRate"]), # Equip Load
-            ]
+            item["stats"] = {};
+            item["stats"]["VIG"] = int(effect["addLifeForceStatus"]); # Vigor
+            item["stats"]["MND"] = int(effect["addWillpowerStatus"]); # Mind
+            item["stats"]["END"] = int(effect["addEndureStatus"]); # Endurance
+            item["stats"]["STR"] = int(effect["addStrengthStatus"]); # Strength
+            item["stats"]["DEX"] = int(effect["addDexterityStatus"]); # Dexterity
+            item["stats"]["INT"] = int(effect["addMagicStatus"]); # Intelligence
+            item["stats"]["FTH"] = int(effect["addFaithStatus"]); # Faith
+            item["stats"]["ARC"] = int(effect["addLuckStatus"]); # Arcane
+            item["multipliers"] = {};
+            item["multipliers"]["maxHp"] = float(effect["maxHpRate"]); # Max HP
+            item["multipliers"]["maxFp"] = float(effect["maxMpRate"]); # Max FP
+            item["multipliers"]["maxStamina"] = float(effect["maxStaminaRate"]); # Max Stamina
+            item["multipliers"]["equipLoad"] = float(effect["equipWeightChangeRate"]); # Equip Load
 
-    if all(stat == 0.0 for stat in item["stats"]):
+    if item["stats"] == {
+            "VIG": 0,
+            "MND": 0,
+            "END": 0,
+            "STR": 0,
+            "DEX": 0,
+            "INT": 0,
+            "FTH": 0,
+            "ARC": 0}:
         item.pop("stats")
     if all(mult == 1.0 for mult in item["multipliers"]):
         item.pop("multipliers")
@@ -443,7 +493,13 @@ def process_talisman(row, effects):
 def split_weapon_name(name):
     infusion = "standard"
     for other in INFUSIONS:
-        if "Bloody" in name and not to_kebab(name) in IGNORED_WEAPON_INFUSIONS:
+        if "Fire Knight's" in name:
+            if len(name.split()) >= 4 and (name.split()[2] == other.strip() or ' '.join(name.split()[2:4]) == other.strip()):
+                infusion = other
+                name = name.split()
+                while len(name) > 3: name.pop(2)
+                name = " ".join(name)  
+        elif "Bloody" in name and not to_kebab(name) in IGNORED_WEAPON_INFUSIONS:
             name = name.replace("Bloody ", "")
             infusion = "blood"
         elif "celebrants-cleaver-blades" in to_kebab(name):
@@ -466,148 +522,150 @@ def process_weapon(row, masks, effects):
     name, infusion = split_weapon_name(row["Name"])
     id = to_kebab(name)
 
-    damage = [
-        int(row["attackBasePhysics"]), # Physical
-        int(row["attackBaseMagic"]), # Magic
-        int(row["attackBaseFire"]), # Fire
-        int(row["attackBaseThunder"]), # Lightning
-        int(row["attackBaseDark"]), # Holy
-    ]
+    damage = {
+        "physical": int(row["attackBasePhysics"]),
+        "magic": int(row["attackBaseMagic"]),
+        "fire": int(row["attackBaseFire"]),
+        "lightning": int(row["attackBaseThunder"]),
+        "holy": int(row["attackBaseDark"]),
+    }
 
-    scaling = [
-        float(row["correctStrength"]) / 100.0, # STR
-        float(row["correctAgility"]) / 100.0, # DEX
-        float(row["correctMagic"]) / 100.0, # INT
-        float(row["correctFaith"]) / 100.0, # FTH
-        float(row["correctLuck"]) / 100.0, # ARC
-    ]
+    scaling = {
+        "STR": float(row["correctStrength"]) / 100.0,
+        "DEX": float(row["correctAgility"]) / 100.0,
+        "INT": float(row["correctMagic"]) / 100.0,
+        "FTH": float(row["correctFaith"]) / 100.0,
+        "ARC": float(row["correctLuck"]) / 100.0,
+    }
 
     mask_id = row["attackElementCorrectId"]
     mask_row = masks[mask_id]
 
-    weapon_masks = [
-        [  # Does Physical Damage Scale With...
-            to_mask(mask_row["isStrengthCorrect_byPhysics"]), # STR
-            to_mask(mask_row["isDexterityCorrect_byPhysics"]), # DEX
-            to_mask(mask_row["isMagicCorrect_byPhysics"]), # INT
-            to_mask(mask_row["isFaithCorrect_byPhysics"]), # FTH
-            to_mask(mask_row["isLuckCorrect_byPhysics"]), # ARC
-        ],
-        [  # Does Magic Damage Scale With...
-            to_mask(mask_row["isStrengthCorrect_byMagic"]), # STR
-            to_mask(mask_row["isDexterityCorrect_byMagic"]), # DEX
-            to_mask(mask_row["isMagicCorrect_byMagic"]), # INT
-            to_mask(mask_row["isFaithCorrect_byMagic"]), # FTH
-            to_mask(mask_row["isLuckCorrect_byMagic"]), # ARC
-        ],
-        [  # Does Fire Damage Scale With...
-            to_mask(mask_row["isStrengthCorrect_byFire"]), # STR
-            to_mask(mask_row["isDexterityCorrect_byFire"]), # DEX
-            to_mask(mask_row["isMagicCorrect_byFire"]), # INT
-            to_mask(mask_row["isFaithCorrect_byFire"]), # FTH
-            to_mask(mask_row["isLuckCorrect_byFire"]), # ARC
-        ],
-        [  # Does Lightning Damage Scale With...
-            to_mask(mask_row["isStrengthCorrect_byThunder"]), # STR
-            to_mask(mask_row["isDexterityCorrect_byThunder"]), # DEX
-            to_mask(mask_row["isMagicCorrect_byThunder"]), # INT
-            to_mask(mask_row["isFaithCorrect_byThunder"]), # FTH
-            to_mask(mask_row["isLuckCorrect_byThunder"]), # ARC
-        ],
-        [  # Does Holy Damage Scale With...
-            to_mask(mask_row["isStrengthCorrect_byDark"]), # STR
-            to_mask(mask_row["isDexterityCorrect_byDark"]), # DEX
-            to_mask(mask_row["isMagicCorrect_byDark"]), # INT
-            to_mask(mask_row["isFaithCorrect_byDark"]), # FTH
-            to_mask(mask_row["isLuckCorrect_byDark"]), # ARC
-        ],
-    ]
+    weapon_masks = {
+        "physical": {  # Does Physical Damage Scale With...
+            "STR": to_mask(mask_row["isStrengthCorrect_byPhysics"]),
+            "DEX": to_mask(mask_row["isDexterityCorrect_byPhysics"]),
+            "INT": to_mask(mask_row["isMagicCorrect_byPhysics"]), 
+            "FTH": to_mask(mask_row["isFaithCorrect_byPhysics"]),
+            "ARC": to_mask(mask_row["isLuckCorrect_byPhysics"]), 
+        },
+        "magic": {   # Does Magic Damage Scale With...
+            "STR": to_mask(mask_row["isStrengthCorrect_byMagic"]), 
+            "DEX": to_mask(mask_row["isDexterityCorrect_byMagic"]), 
+            "INT": to_mask(mask_row["isMagicCorrect_byMagic"]),
+            "FTH": to_mask(mask_row["isFaithCorrect_byMagic"]), 
+            "ARC": to_mask(mask_row["isLuckCorrect_byMagic"]), 
+        },
+        "fire": {  # Does Fire Damage Scale With...
+            "STR": to_mask(mask_row["isStrengthCorrect_byFire"]), 
+            "DEX": to_mask(mask_row["isDexterityCorrect_byFire"]), 
+            "INT": to_mask(mask_row["isMagicCorrect_byFire"]), 
+            "FTH": to_mask(mask_row["isFaithCorrect_byFire"]), 
+            "ARC": to_mask(mask_row["isLuckCorrect_byFire"]), 
+        },
+        "lightning": {  # Does Lightning Damage Scale With...
+            "STR": to_mask(mask_row["isStrengthCorrect_byThunder"]),
+            "DEX": to_mask(mask_row["isDexterityCorrect_byThunder"]), 
+            "INT": to_mask(mask_row["isMagicCorrect_byThunder"]), 
+            "FTH": to_mask(mask_row["isFaithCorrect_byThunder"]), 
+            "ARC": to_mask(mask_row["isLuckCorrect_byThunder"]),
+        },
+        "holy": {  # Does Holy Damage Scale With...
+            "STR": to_mask(mask_row["isStrengthCorrect_byDark"]), 
+            "DEX": to_mask(mask_row["isDexterityCorrect_byDark"]), 
+            "INT": to_mask(mask_row["isMagicCorrect_byDark"]), 
+            "FTH": to_mask(mask_row["isFaithCorrect_byDark"]),
+            "ARC": to_mask(mask_row["isLuckCorrect_byDark"]), 
+        },
+    }
 
-    corrections = [
-        row["correctType_Physics"],
-        row["correctType_Magic"],
-        row["correctType_Fire"],
-        row["correctType_Thunder"],
-        row["correctType_Dark"],
-        row["correctType_Poison"],
-        row["correctType_Blood"],
-        row["correctType_Sleep"],
-        row["correctType_Madness"],
-    ]
+    corrections = {
+        "physical": row["correctType_Physics"],
+        "magic": row["correctType_Magic"],
+        "fire": row["correctType_Fire"],
+        "lightning": row["correctType_Thunder"],
+        "holy": row["correctType_Dark"], 
+        "poison": row["correctType_Poison"], 
+        "bleed": row["correctType_Blood"], 
+        "sleep": row["correctType_Sleep"], 
+        "madness": row["correctType_Madness"], 
+    }
 
-    buffable = '0' in row["disableGemAttr"]
+    buffable = '0' in row["isEnhance"]
 
     # Auxiliary Effects (blood, poison)
     aux = {}
     for aux_id in [row["spEffectBehaviorId0"], row["spEffectBehaviorId1"]]:
-        if int(aux_id) != -1 and int(aux_id) > 5000000:
-            aux_name = effects[aux_id]["Name"]
-            if "Hemorrhage" in aux_name:
-                aux["bleed"] = aux_id
-            elif "Frostbite" in aux_name:
-                aux["frost"] = aux_id
-            elif "Poison" in aux_name:
-                aux["poison"] = aux_id
-            elif "Scarlet Rot" in aux_name:
-                aux["scarlet_rot"] = aux_id
-            elif "Madness" in aux_name:
-                aux["madness"] = aux_id
-        elif int(aux_id) != -1 and int(aux_id) > 100000:
-            aux_name = effects[aux_id]["Name"]
-            xs = [x for x in range(0, 26)]
-            ys = [effects[str(int(aux_id) + x)] for x in xs]
+        if int(aux_id) != -1:
+            if int(aux_id) > 5000000:
+                aux_name = effects[aux_id]["Name"]
+                if "Hemorrhage" in aux_name:
+                    aux["bleed"] = {"id": "bleed", "effect": aux_id}
+                elif "Frostbite" in aux_name:
+                    aux["frost"] = {"id": "frost", "effect": aux_id}
+                elif "Poison" in aux_name:
+                    aux["poison"] = {"id": "poison", "effect": aux_id}
+                elif "Scarlet Rot" in aux_name:
+                    aux["scarlet_rot"] = {"id": "scarlet_rot", "effect": aux_id}
+                elif "Madness" in aux_name:
+                    aux["madness"] = {"id": "madness", "effect": aux_id}
+            elif int(aux_id) > 100000:
+                aux_name = effects[aux_id]["Name"]
+                standard_upgrade_effect_range = [x for x in range(0, 26)]
+                standard_upgrade_effects = [effects[str(int(aux_id) + x)] for x in standard_upgrade_effect_range]
 
-            if "Hemorrhage" in aux_name:
-                ty = "bleed"
-                ys = [int(y["bloodDefDamageRate"]) for y in ys]
-            elif "Frostbite" in aux_name:
-                ty = "frost"
-                ys = [int(y["freezeDefDamageRate"]) for y in ys]
-            elif "Poison" in aux_name:
-                ty = "poison"
-                ys = [int(y["poisonDefDamageRate"]) for y in ys]
-            elif "Scarlet Rot" in aux_name:
-                ty = "scarlet_rot"
-                ys = [int(y["diseaseDefDamageRate"]) for y in ys]
-            elif "Madness" in aux_name:
-                ty = "madness"
-                ys = [int(y["madnessDefDamageRate"]) for y in ys]
-            elif "Sleep" in aux_name:
-                ty = "sleep"
-                ys = [int(y["sleepDefDamageRate"]) for y in ys]
-            elif "Blight" in aux_name:
-                ty = "blight"
-                ys = [int(y["curseDefDamageRate"]) for y in ys]
-            aux[ty] = regression(xs, ys)
-        elif int(aux_id) != -1 and int(aux_id) <= 100000:
-            aux_name = effects[aux_id]["Name"]
-            if "Hemorrhage" in aux_name:
-                ty = "bleed"
-                # base = effects[aux_id]["Inflict Hemorrhage +"]
-            elif "Frostbite" in aux_name:
-                ty = "frost"
-                # base = effects[aux_id]["Inflict Frostbite +"]
-            elif "Poison" in aux_name:
-                ty = "poison"
-                # base = effects[aux_id]["Inflict Poison +"]
-            elif "Scarlet Rot" in aux_name:
-                ty = "scarlet_rot"
-                # base = effects[aux_id]["Inflict Scarlet Rot +"]
-            elif "Madness" in aux_name:
-                ty = "madness"
-                # base = effects[aux_id]["Inflict Madness +"]
-            elif "Sleep" in aux_name:
-                ty = "sleep"
-                # base = effects[aux_id]["Inflict Sleep +"]
-            elif "Blight" in aux_name:
-                ty = "blight"
-                # base = effects[aux_id]["Inflict Blight +"]
-            aux[ty] = [0.0, aux_name]
+                if "Hemorrhage" in aux_name or int(effects[aux_id]["bloodAttackPower"]) > 0:
+                    type = "bleed"
+                    standard_upgrade_effects = [int(y["bloodDefDamageRate"]) for y in standard_upgrade_effects]
+                elif "Frostbite" in aux_name or int(effects[aux_id]["freezeAttackPower"]) > 0:
+                    type = "frost"
+                    standard_upgrade_effects = [int(y["freezeDefDamageRate"]) for y in standard_upgrade_effects]
+                elif "Poison" in aux_name or int(effects[aux_id]["poizonAttackPower"]) > 0:
+                    type = "poison"
+                    standard_upgrade_effects = [int(y["poisonDefDamageRate"]) for y in standard_upgrade_effects]
+                elif "Scarlet Rot" in aux_name:
+                    type = "scarlet_rot"
+                    standard_upgrade_effects = [int(y["diseaseDefDamageRate"]) for y in standard_upgrade_effects]
+                elif "Madness" in aux_name:
+                    type = "madness"
+                    standard_upgrade_effects = [int(y["madnessDefDamageRate"]) for y in standard_upgrade_effects]
+                elif "Sleep" in aux_name:
+                    type = "sleep"
+                    standard_upgrade_effects = [int(y["sleepDefDamageRate"]) for y in standard_upgrade_effects]
+                elif "Blight" in aux_name:
+                    type = "blight"
+                    standard_upgrade_effects = [int(y["curseDefDamageRate"]) for y in standard_upgrade_effects]
+                aux[type] = {"id": type, "effect": regression(standard_upgrade_effect_range, standard_upgrade_effects)}
+            elif int(aux_id) <= 100000:
+                aux_name = effects[aux_id]["Name"]
+                if "Hemorrhage" in aux_name:
+                    type = "bleed"
+                    base = effects[aux_id]["bloodDefDamageRate"]
+                elif "Frostbite" in aux_name:
+                    type = "frost"
+                    base = effects[aux_id]["freezeDefDamageRate"]
+                elif "Poison" in aux_name:
+                    type = "poison"
+                    base = effects[aux_id]["poisonDefDamageRate"]
+                elif "Scarlet Rot" in aux_name:
+                    type = "scarlet_rot"
+                    base = effects[aux_id]["diseaseDefDamageRate"]
+                elif "Madness" in aux_name:
+                    type = "madness"
+                    base = effects[aux_id]["madnessDefDamageRate"]
+                elif "Sleep" in aux_name:
+                    type = "sleep"
+                    base = effects[aux_id]["sleepDefDamageRate"]
+                elif "Blight" in aux_name:
+                    type = "blight"
+                    base = effects[aux_id]["curseDefDamageRate"]
+                aux[type] = {"id": type, "effect": [0.0, int(base)]}
 
     if id in weapons:
         if not id in IGNORED_WEAPON_INFUSIONS:
             weapon = weapons[id]
             weapon["infusions"][infusion] = {
+                "id": infusion,
                 "damage": damage,
                 "scaling": scaling,
                 "aux": aux,
@@ -622,13 +680,13 @@ def process_weapon(row, masks, effects):
         weapon["id"] = id
         weapon["name"] = name
 
-        weapon["requirements"] = [
-            int(row["properStrength"]), # STR
-            int(row["properAgility"]), # DEX
-            int(row["properMagic"]), # INT
-            int(row["properFaith"]), # FTH
-            int(row["properLuck"]), # ARC
-        ]
+        weapon["requirements"] = {
+            "STR": int(row["properStrength"]), # STR
+            "DEX": int(row["properAgility"]), # DEX
+            "INT": int(row["properMagic"]), # INT
+            "FTH": int(row["properFaith"]), # FTH
+            "ARC": int(row["properLuck"]), # ARC
+        }
 
         weapon["category"] = WEAPON_CATEGORIES[int(row["ID"]) // 1000000]
 
@@ -639,6 +697,7 @@ def process_weapon(row, masks, effects):
 
         weapon["infusions"] = {}
         weapon["infusions"][infusion] = {
+            "id": infusion,
             "damage": damage,
             "scaling": scaling,
             "aux": aux,
@@ -687,20 +746,20 @@ def extract_infusions(rows):
         lightning_upg, lightning_dmg = regression(xs, lightning)
         holy_upg, holy_dmg = regression(xs, holy)
 
-        infusion["damage"] = [
-            physical_dmg,
-            magic_dmg,
-            fire_dmg,
-            lightning_dmg,
-            holy_dmg,
-        ]
-        infusion["upgrade"] = [
-            physical_upg,
-            magic_upg,
-            fire_upg,
-            lightning_upg,
-            holy_upg,
-        ]
+        infusion["damage"] = {
+            "physical": physical_dmg,
+            "magic": magic_dmg,
+            "fire": fire_dmg,
+            "lightning": lightning_dmg,
+            "holy": holy_dmg,
+        }
+        infusion["upgrade"] = {
+            "physical": physical_upg,
+            "magic": magic_upg,
+            "fire": fire_upg,
+            "lightning": lightning_upg,
+            "holy": holy_upg,
+        }
 
         # scaling
         strength = [float(relevant[i]["correctStrengthRate"]) for i in range(0, 26)]
@@ -715,20 +774,20 @@ def extract_infusions(rows):
         fth_growth, fth_scaling = regression(xs, faith)
         arc_growth, arc_scaling = regression(xs, arcane)
 
-        infusion["scaling"] = [
-            str_scaling,
-            dex_scaling,
-            int_scaling,
-            fth_scaling,
-            arc_scaling,
-        ]
-        infusion["growth"] = [
-            str_growth,
-            dex_growth,
-            int_growth,
-            fth_growth,
-            arc_growth,
-        ]
+        infusion["scaling"] = {
+            "STR": str_scaling,
+            "DEX": dex_scaling,
+            "INT": int_scaling,
+            "FTH": fth_scaling,
+            "ARC": arc_scaling,
+        }
+        infusion["growth"] = {
+            "STR": str_growth,
+            "DEX": dex_growth,
+            "INT": int_growth,
+            "FTH": fth_growth,
+            "ARC": arc_growth,
+        }
 
         infusions[id] = infusion
 
@@ -738,121 +797,122 @@ def process_damage(caps):
         calculation = {}
 
         id = row["ID"]
+        calculation["name"] = row["Name"]
         calculation["id"] = id
 
-        calculation["softcaps"] = [
-            [  # physical
+        calculation["softcaps"] = {
+            "physical": [
                 int(row["stageMaxVal0"]),
                 int(row["stageMaxVal1"]),
                 int(row["stageMaxVal2"]),
                 int(row["stageMaxVal3"]),
                 int(row["stageMaxVal4"]),
             ],
-            [  # magic
+            "magic": [
                 int(row["stageMaxVal0"]),
                 int(row["stageMaxVal1"]),
                 int(row["stageMaxVal2"]),
                 int(row["stageMaxVal3"]),
                 int(row["stageMaxVal4"]),
             ],
-            [  # fire
+            "fire": [
                 int(row["stageMaxVal0"]),
                 int(row["stageMaxVal1"]),
                 int(row["stageMaxVal2"]),
                 int(row["stageMaxVal3"]),
                 int(row["stageMaxVal4"]),
             ],
-            [  # lightning
+            "lightning": [
                 int(row["stageMaxVal0"]),
                 int(row["stageMaxVal1"]),
                 int(row["stageMaxVal2"]),
                 int(row["stageMaxVal3"]),
                 int(row["stageMaxVal4"]),
             ],
-            [  # holy
+            "holy": [
                 int(row["stageMaxVal0"]),
                 int(row["stageMaxVal1"]),
                 int(row["stageMaxVal2"]),
                 int(row["stageMaxVal3"]),
                 int(row["stageMaxVal4"]),
             ],
-        ]
+        }
 
-        calculation["growth"] = [
-            [
+        calculation["growth"] = {
+            "physical": [
                 int(row["stageMaxGrowVal0"]),
                 int(row["stageMaxGrowVal1"]),
                 int(row["stageMaxGrowVal2"]),
                 int(row["stageMaxGrowVal3"]),
                 int(row["stageMaxGrowVal4"]),
             ],
-            [
+            "magic": [
                 int(row["stageMaxGrowVal0"]),
                 int(row["stageMaxGrowVal1"]),
                 int(row["stageMaxGrowVal2"]),
                 int(row["stageMaxGrowVal3"]),
                 int(row["stageMaxGrowVal4"]),
             ],
-            [
+            "fire": [
                 int(row["stageMaxGrowVal0"]),
                 int(row["stageMaxGrowVal1"]),
                 int(row["stageMaxGrowVal2"]),
                 int(row["stageMaxGrowVal3"]),
                 int(row["stageMaxGrowVal4"]),
             ],
-            [
+            "lightning":[
                 int(row["stageMaxGrowVal0"]),
                 int(row["stageMaxGrowVal1"]),
                 int(row["stageMaxGrowVal2"]),
                 int(row["stageMaxGrowVal3"]),
                 int(row["stageMaxGrowVal4"]),
             ],
-            [
+            "holy": [
                 int(row["stageMaxGrowVal0"]),
                 int(row["stageMaxGrowVal1"]),
                 int(row["stageMaxGrowVal2"]),
                 int(row["stageMaxGrowVal3"]),
                 int(row["stageMaxGrowVal4"]),
             ],
-        ]
+        }
 
-        calculation["adjustments"] = [
-            [
+        calculation["adjustments"] = {
+            "physical": [
                 float(row["adjPt_maxGrowVal0"]),
                 float(row["adjPt_maxGrowVal1"]),
                 float(row["adjPt_maxGrowVal2"]),
                 float(row["adjPt_maxGrowVal3"]),
                 float(row["adjPt_maxGrowVal4"]),
             ],
-            [
+            "magic": [
                 float(row["adjPt_maxGrowVal0"]),
                 float(row["adjPt_maxGrowVal1"]),
                 float(row["adjPt_maxGrowVal2"]),
                 float(row["adjPt_maxGrowVal3"]),
                 float(row["adjPt_maxGrowVal4"]),
             ],
-            [
+            "fire": [
                 float(row["adjPt_maxGrowVal0"]),
                 float(row["adjPt_maxGrowVal1"]),
                 float(row["adjPt_maxGrowVal2"]),
                 float(row["adjPt_maxGrowVal3"]),
                 float(row["adjPt_maxGrowVal4"]),
             ],
-            [
+            "lightning":[
                 float(row["adjPt_maxGrowVal0"]),
                 float(row["adjPt_maxGrowVal1"]),
                 float(row["adjPt_maxGrowVal2"]),
                 float(row["adjPt_maxGrowVal3"]),
                 float(row["adjPt_maxGrowVal4"]),
             ],
-            [
+            "holy": [
                 float(row["adjPt_maxGrowVal0"]),
                 float(row["adjPt_maxGrowVal1"]),
                 float(row["adjPt_maxGrowVal2"]),
                 float(row["adjPt_maxGrowVal3"]),
                 float(row["adjPt_maxGrowVal4"]),
             ],
-        ]
+        }
 
         calculations[id] = calculation
 
