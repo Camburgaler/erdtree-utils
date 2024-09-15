@@ -81,7 +81,6 @@ WEAPON_CATEGORIES = {
     68: "beast-claw",
 }
 
-
 def main():
 
     global helmets
@@ -350,7 +349,7 @@ def main():
                     "lightning": "0",
                     "holy": "0",
                     "poison": "0",
-                    "bleed": "0",
+                    "blood": "0",
                     "sleep": "0",
                     "madness": "0"
                 },
@@ -586,7 +585,7 @@ def process_weapon(row, masks, effects):
         "lightning": row["correctType_Thunder"],
         "holy": row["correctType_Dark"], 
         "poison": row["correctType_Poison"], 
-        "bleed": row["correctType_Blood"], 
+        "blood": row["correctType_Blood"], 
         "sleep": row["correctType_Sleep"], 
         "madness": row["correctType_Madness"], 
     }
@@ -600,66 +599,67 @@ def process_weapon(row, masks, effects):
             if int(aux_id) > 5000000:
                 aux_name = effects[aux_id]["Name"]
                 if "Hemorrhage" in aux_name:
-                    aux["bleed"] = {"id": "bleed", "effect": aux_id}
+                    aux["blood"] =  aux_id
                 elif "Frostbite" in aux_name:
-                    aux["frost"] = {"id": "frost", "effect": aux_id}
+                    aux["frost"] = aux_id
                 elif "Poison" in aux_name:
-                    aux["poison"] = {"id": "poison", "effect": aux_id}
+                    aux["poison"] = aux_id
                 elif "Scarlet Rot" in aux_name:
-                    aux["scarlet_rot"] = {"id": "scarlet_rot", "effect": aux_id}
+                    aux["scarlet-rot"] = aux_id
                 elif "Madness" in aux_name:
-                    aux["madness"] = {"id": "madness", "effect": aux_id}
+                    aux["madness"] = aux_id
             elif int(aux_id) > 100000:
                 aux_name = effects[aux_id]["Name"]
-                standard_upgrade_effect_range = [x for x in range(0, 26)]
-                standard_upgrade_effects = [effects[str(int(aux_id) + x)] for x in standard_upgrade_effect_range]
+                # standard_upgrade_effect_range = [x for x in range(0, 26)]
+                # standard_upgrade_effects = [effects[str(int(aux_id) + x)] for x in standard_upgrade_effect_range]
+                standard_upgrade_effects = [effects[aux_id], effects[str(int(aux_id) + 25)]]
 
                 if "Hemorrhage" in aux_name or int(effects[aux_id]["bloodAttackPower"]) > 0:
-                    type = "bleed"
-                    standard_upgrade_effects = [int(y["bloodDefDamageRate"]) for y in standard_upgrade_effects]
+                    type = "blood"
+                    standard_upgrade_effects = [int(y["bloodAttackPower"]) for y in standard_upgrade_effects]
                 elif "Frostbite" in aux_name or int(effects[aux_id]["freezeAttackPower"]) > 0:
                     type = "frost"
-                    standard_upgrade_effects = [int(y["freezeDefDamageRate"]) for y in standard_upgrade_effects]
+                    standard_upgrade_effects = [int(y["freezeAttackPower"]) for y in standard_upgrade_effects]
                 elif "Poison" in aux_name or int(effects[aux_id]["poizonAttackPower"]) > 0:
                     type = "poison"
-                    standard_upgrade_effects = [int(y["poisonDefDamageRate"]) for y in standard_upgrade_effects]
+                    standard_upgrade_effects = [int(y["poizonAttackPower"]) for y in standard_upgrade_effects]
                 elif "Scarlet Rot" in aux_name:
-                    type = "scarlet_rot"
-                    standard_upgrade_effects = [int(y["diseaseDefDamageRate"]) for y in standard_upgrade_effects]
+                    type = "scarlet-rot"
+                    standard_upgrade_effects = [int(y["diseaseAttackPower"]) for y in standard_upgrade_effects]
                 elif "Madness" in aux_name:
                     type = "madness"
-                    standard_upgrade_effects = [int(y["madnessDefDamageRate"]) for y in standard_upgrade_effects]
+                    standard_upgrade_effects = [int(y["madnessAttackPower"]) for y in standard_upgrade_effects]
                 elif "Sleep" in aux_name:
                     type = "sleep"
-                    standard_upgrade_effects = [int(y["sleepDefDamageRate"]) for y in standard_upgrade_effects]
+                    standard_upgrade_effects = [int(y["sleepAttackPower"]) for y in standard_upgrade_effects]
                 elif "Blight" in aux_name:
                     type = "blight"
-                    standard_upgrade_effects = [int(y["curseDefDamageRate"]) for y in standard_upgrade_effects]
-                aux[type] = {"id": type, "effect": regression(standard_upgrade_effect_range, standard_upgrade_effects)}
+                    standard_upgrade_effects = [int(y["curseAttackPower"]) for y in standard_upgrade_effects]
+                aux[type] = standard_upgrade_effects
             elif int(aux_id) <= 100000:
                 aux_name = effects[aux_id]["Name"]
                 if "Hemorrhage" in aux_name:
-                    type = "bleed"
-                    base = effects[aux_id]["bloodDefDamageRate"]
+                    type = "blood"
+                    base = effects[aux_id]["bloodAttackPower"]
                 elif "Frostbite" in aux_name:
                     type = "frost"
-                    base = effects[aux_id]["freezeDefDamageRate"]
+                    base = effects[aux_id]["freezeAttackPower"]
                 elif "Poison" in aux_name:
                     type = "poison"
-                    base = effects[aux_id]["poisonDefDamageRate"]
+                    base = effects[aux_id]["poizonAttackPower"]
                 elif "Scarlet Rot" in aux_name:
-                    type = "scarlet_rot"
-                    base = effects[aux_id]["diseaseDefDamageRate"]
+                    type = "scarlet-rot"
+                    base = effects[aux_id]["diseaseAttackPower"]
                 elif "Madness" in aux_name:
                     type = "madness"
-                    base = effects[aux_id]["madnessDefDamageRate"]
+                    base = effects[aux_id]["madnessAttackPower"]
                 elif "Sleep" in aux_name:
                     type = "sleep"
-                    base = effects[aux_id]["sleepDefDamageRate"]
+                    base = effects[aux_id]["sleepAttackPower"]
                 elif "Blight" in aux_name:
                     type = "blight"
-                    base = effects[aux_id]["curseDefDamageRate"]
-                aux[type] = {"id": type, "effect": [0.0, int(base)]}
+                    base = effects[aux_id]["curseAttackPower"]
+                aux[type] = [int(base), int(base)]
 
     if id in weapons:
         if not id in IGNORED_WEAPON_INFUSIONS:
@@ -715,8 +715,8 @@ def regression(xs, ys):
     xy = sum([x * y for x, y in zip(xs, ys)])  # sum of all x * y
     xsq = sum([x * x for x in xs])  # sum of all squared xs
 
-    a = (n * xy - sum(xs) * sum(ys)) / (n * xsq - sum(xs) ** 2)
-    b = ys[0]
+    a = (n * xy - sum(xs) * sum(ys)) / (n * xsq - sum(xs) ** 2) # slope
+    b = ys[0] # intercept
 
     return round(a, 5), b
 
@@ -800,119 +800,29 @@ def process_damage(caps):
         calculation["name"] = row["Name"]
         calculation["id"] = id
 
-        calculation["softcaps"] = {
-            "physical": [
-                int(row["stageMaxVal0"]),
-                int(row["stageMaxVal1"]),
-                int(row["stageMaxVal2"]),
-                int(row["stageMaxVal3"]),
-                int(row["stageMaxVal4"]),
-            ],
-            "magic": [
-                int(row["stageMaxVal0"]),
-                int(row["stageMaxVal1"]),
-                int(row["stageMaxVal2"]),
-                int(row["stageMaxVal3"]),
-                int(row["stageMaxVal4"]),
-            ],
-            "fire": [
-                int(row["stageMaxVal0"]),
-                int(row["stageMaxVal1"]),
-                int(row["stageMaxVal2"]),
-                int(row["stageMaxVal3"]),
-                int(row["stageMaxVal4"]),
-            ],
-            "lightning": [
-                int(row["stageMaxVal0"]),
-                int(row["stageMaxVal1"]),
-                int(row["stageMaxVal2"]),
-                int(row["stageMaxVal3"]),
-                int(row["stageMaxVal4"]),
-            ],
-            "holy": [
-                int(row["stageMaxVal0"]),
-                int(row["stageMaxVal1"]),
-                int(row["stageMaxVal2"]),
-                int(row["stageMaxVal3"]),
-                int(row["stageMaxVal4"]),
-            ],
-        }
+        calculation["softcaps"] = [
+            int(row["stageMaxVal0"]),
+            int(row["stageMaxVal1"]),
+            int(row["stageMaxVal2"]),
+            int(row["stageMaxVal3"]),
+            int(row["stageMaxVal4"]),
+        ]
 
-        calculation["growth"] = {
-            "physical": [
-                int(row["stageMaxGrowVal0"]),
-                int(row["stageMaxGrowVal1"]),
-                int(row["stageMaxGrowVal2"]),
-                int(row["stageMaxGrowVal3"]),
-                int(row["stageMaxGrowVal4"]),
-            ],
-            "magic": [
-                int(row["stageMaxGrowVal0"]),
-                int(row["stageMaxGrowVal1"]),
-                int(row["stageMaxGrowVal2"]),
-                int(row["stageMaxGrowVal3"]),
-                int(row["stageMaxGrowVal4"]),
-            ],
-            "fire": [
-                int(row["stageMaxGrowVal0"]),
-                int(row["stageMaxGrowVal1"]),
-                int(row["stageMaxGrowVal2"]),
-                int(row["stageMaxGrowVal3"]),
-                int(row["stageMaxGrowVal4"]),
-            ],
-            "lightning":[
-                int(row["stageMaxGrowVal0"]),
-                int(row["stageMaxGrowVal1"]),
-                int(row["stageMaxGrowVal2"]),
-                int(row["stageMaxGrowVal3"]),
-                int(row["stageMaxGrowVal4"]),
-            ],
-            "holy": [
-                int(row["stageMaxGrowVal0"]),
-                int(row["stageMaxGrowVal1"]),
-                int(row["stageMaxGrowVal2"]),
-                int(row["stageMaxGrowVal3"]),
-                int(row["stageMaxGrowVal4"]),
-            ],
-        }
+        calculation["growth"] = [
+            int(row["stageMaxGrowVal0"]),
+            int(row["stageMaxGrowVal1"]),
+            int(row["stageMaxGrowVal2"]),
+            int(row["stageMaxGrowVal3"]),
+            int(row["stageMaxGrowVal4"]),
+        ]
 
-        calculation["adjustments"] = {
-            "physical": [
-                float(row["adjPt_maxGrowVal0"]),
-                float(row["adjPt_maxGrowVal1"]),
-                float(row["adjPt_maxGrowVal2"]),
-                float(row["adjPt_maxGrowVal3"]),
-                float(row["adjPt_maxGrowVal4"]),
-            ],
-            "magic": [
-                float(row["adjPt_maxGrowVal0"]),
-                float(row["adjPt_maxGrowVal1"]),
-                float(row["adjPt_maxGrowVal2"]),
-                float(row["adjPt_maxGrowVal3"]),
-                float(row["adjPt_maxGrowVal4"]),
-            ],
-            "fire": [
-                float(row["adjPt_maxGrowVal0"]),
-                float(row["adjPt_maxGrowVal1"]),
-                float(row["adjPt_maxGrowVal2"]),
-                float(row["adjPt_maxGrowVal3"]),
-                float(row["adjPt_maxGrowVal4"]),
-            ],
-            "lightning":[
-                float(row["adjPt_maxGrowVal0"]),
-                float(row["adjPt_maxGrowVal1"]),
-                float(row["adjPt_maxGrowVal2"]),
-                float(row["adjPt_maxGrowVal3"]),
-                float(row["adjPt_maxGrowVal4"]),
-            ],
-            "holy": [
-                float(row["adjPt_maxGrowVal0"]),
-                float(row["adjPt_maxGrowVal1"]),
-                float(row["adjPt_maxGrowVal2"]),
-                float(row["adjPt_maxGrowVal3"]),
-                float(row["adjPt_maxGrowVal4"]),
-            ],
-        }
+        calculation["adjustments"] = [
+            float(row["adjPt_maxGrowVal0"]),
+            float(row["adjPt_maxGrowVal1"]),
+            float(row["adjPt_maxGrowVal2"]),
+            float(row["adjPt_maxGrowVal3"]),
+            float(row["adjPt_maxGrowVal4"]),
+        ]
 
         calculations[id] = calculation
 
