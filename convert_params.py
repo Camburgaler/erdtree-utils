@@ -25,14 +25,14 @@ INFUSIONS = [
     "Heavy ",
     "Keen ",
     "Quality ",
+    "Magic ",
     "Fire ",
     "Flame Art ",
     "Lightning ",
     "Sacred ",
-    "Magic ",
-    "Cold ",
     "Poison ",
     "Blood ",
+    "Cold ",
     "Occult ",
 ]
 
@@ -590,7 +590,7 @@ def process_weapon(row, masks, effects):
         "madness": row["correctType_Madness"], 
     }
 
-    buffable = '0' in row["isEnhance"]
+    buffable = '1' in row["isEnhance"]
 
     # Auxiliary Effects (blood, poison)
     aux = {}
@@ -797,7 +797,6 @@ def process_damage(caps):
         calculation = {}
 
         id = row["ID"]
-        calculation["name"] = row["Name"]
         calculation["id"] = id
 
         calculation["softcaps"] = [
