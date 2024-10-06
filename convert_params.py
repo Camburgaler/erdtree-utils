@@ -684,15 +684,13 @@ def process_weapon(row, masks, effects):
         "holy": int(row["attackBaseDark"]),
     }
 
-    scaling = []
-    for upgLevel in range(0, 26):
-        scaling.append({
-            "STR": float(row["correctStrength"]) / 100.0 * infusions[infusion]["statScalingRate"]["STR"][upgLevel],
-            "DEX": float(row["correctAgility"]) / 100.0 * infusions[infusion]["statScalingRate"]["DEX"][upgLevel],
-            "INT": float(row["correctMagic"]) / 100.0 * infusions[infusion]["statScalingRate"]["INT"][upgLevel],
-            "FTH": float(row["correctFaith"]) / 100.0 * infusions[infusion]["statScalingRate"]["FTH"][upgLevel],
-            "ARC": float(row["correctLuck"]) / 100.0 * infusions[infusion]["statScalingRate"]["ARC"][upgLevel],
-        })
+    scaling = {
+        "STR": float(row["correctStrength"]) / 100.0,
+        "DEX": float(row["correctAgility"]) / 100.0,
+        "INT": float(row["correctMagic"]) / 100.0,
+        "FTH": float(row["correctFaith"]) / 100.0,
+        "ARC": float(row["correctLuck"]) / 100.0,
+    }
 
     mask_id = row["attackElementCorrectId"]
     mask_row = masks[mask_id]
@@ -935,31 +933,6 @@ def process_damage(caps):
         calculation = {}
 
         id = row["ID"]
-        # calculation["id"] = id
-
-        # calculation["softcaps"] = [
-        #     int(row["stageMaxVal0"]),
-        #     int(row["stageMaxVal1"]),
-        #     int(row["stageMaxVal2"]),
-        #     int(row["stageMaxVal3"]),
-        #     int(row["stageMaxVal4"]),
-        # ]
-
-        # calculation["growth"] = [
-        #     int(row["stageMaxGrowVal0"]) / 100.0,
-        #     int(row["stageMaxGrowVal1"]) / 100.0,
-        #     int(row["stageMaxGrowVal2"]) / 100.0,
-        #     int(row["stageMaxGrowVal3"]) / 100.0,
-        #     int(row["stageMaxGrowVal4"]) / 100.0,
-        # ]
-
-        # calculation["adjustments"] = [
-        #     float(row["adjPt_maxGrowVal0"]),
-        #     float(row["adjPt_maxGrowVal1"]),
-        #     float(row["adjPt_maxGrowVal2"]),
-        #     float(row["adjPt_maxGrowVal3"]),
-        #     float(row["adjPt_maxGrowVal4"]),
-        # ]
 
         calculation = []
         calculation.append({
