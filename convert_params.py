@@ -187,6 +187,12 @@ def main():
         },
     ]
 
+    # infusions
+    with open("input/ReinforceParamWeapon.csv") as inf:
+        rows = list(csv.DictReader(inf, delimiter=","))
+
+        extract_infusions(rows)
+
     # weapons
     with (
         open("input/AttackElementCorrectParam.csv") as af,
@@ -214,12 +220,6 @@ def main():
                 process_weapon(row, masks, effects)
 
         process_damage(softcaps)
-
-    # infusions
-    with open("input/ReinforceParamWeapon.csv") as inf:
-        rows = list(csv.DictReader(inf, delimiter=","))
-
-        extract_infusions(rows)
 
     # add missing items
     helmets.update(MISSING["helmets"])
@@ -294,6 +294,9 @@ def main():
             "requirements": {"STR": 0, "DEX": 0, "INT": 0, "FTH": 0, "ARC": 0},
             "category": "fist",
             "unique": False,
+            "paired": False,
+            "glintstone-staff": False,
+            "sacred-seal": False,
             "infusions": {
                 "standard": {
                     "id": "standard",
@@ -304,43 +307,195 @@ def main():
                         "lightning": 0,
                         "holy": 0
                     },
-                    "scaling": {
-                        "STR": 0.5,
-                        "DEX": 0.5,
-                        "INT": 0.0,
-                        "FTH": 0.0,
-                        "ARC": 0.0
-                    },
+                    "scaling": [
+                        {
+                            "STR": 0.5,
+                            "DEX": 0.5,
+                            "INT": 0.0,
+                            "FTH": 0.0,
+                            "ARC": 0.0
+                        }, {
+                            "STR": 0.529,
+                            "DEX": 0.529,
+                            "INT": 0.0,
+                            "FTH": 0.0,
+                            "ARC": 0.0
+                        }, {
+                            "STR": 0.558,
+                            "DEX": 0.558,
+                            "INT": 0.0,
+                            "FTH": 0.0,
+                            "ARC": 0.0
+                        }, {
+                            "STR": 0.587,
+                            "DEX": 0.587,
+                            "INT": 0.0,
+                            "FTH": 0.0,
+                            "ARC": 0.0
+                        },{
+                            "STR": 0.616,
+                            "DEX": 0.616,
+                            "INT": 0.0,
+                            "FTH": 0.0,
+                            "ARC": 0.0
+                        },{
+                            "STR": 0.645,
+                            "DEX": 0.645,
+                            "INT": 0.0,
+                            "FTH": 0.0,
+                            "ARC": 0.0
+                        },{
+                            "STR": 0.674,
+                            "DEX": 0.674,
+                            "INT": 0.0,
+                            "FTH": 0.0,
+                            "ARC": 0.0
+                        },{
+                            "STR": 0.703,
+                            "DEX": 0.703,
+                            "INT": 0.0,
+                            "FTH": 0.0,
+                            "ARC": 0.0
+                        }, {
+                            "STR": 0.732,
+                            "DEX": 0.732,
+                            "INT": 0.0,
+                            "FTH": 0.0,
+                            "ARC": 0.0
+                        },{
+                            "STR": 0.761,
+                            "DEX": 0.761,
+                            "INT": 0.0,
+                            "FTH": 0.0,
+                            "ARC": 0.0
+                        },{
+                            "STR": 0.790,
+                            "DEX": 0.790,
+                            "INT": 0.0,
+                            "FTH": 0.0,
+                            "ARC": 0.0
+                        },{
+                            "STR": 0.819,
+                            "DEX": 0.819,
+                            "INT": 0.0,
+                            "FTH": 0.0,
+                            "ARC": 0.0
+                        },{
+                            "STR": 0.848,
+                            "DEX": 0.848,
+                            "INT": 0.0,
+                            "FTH": 0.0,
+                            "ARC": 0.0
+                        }, {
+                            "STR": 0.877,
+                            "DEX": 0.877,
+                            "INT": 0.0,
+                            "FTH": 0.0,
+                            "ARC": 0.0
+                        }, {
+                            "STR": 0.906,
+                            "DEX": 0.906,
+                            "INT": 0.0,
+                            "FTH": 0.0,
+                            "ARC": 0.0
+                        }, {
+                            "STR": 0.935,
+                            "DEX": 0.935,
+                            "INT": 0.0,
+                            "FTH": 0.0,
+                            "ARC": 0.0
+                        }, {
+                            "STR": 0.964,
+                            "DEX": 0.964,
+                            "INT": 0.0,
+                            "FTH": 0.0,
+                            "ARC": 0.0
+                        }, {
+                            "STR": 0.993,
+                            "DEX": 0.993,
+                            "INT": 0.0,
+                            "FTH": 0.0,
+                            "ARC": 0.0
+                        }, {
+                            "STR": 1.022,
+                            "DEX": 1.022,
+                            "INT": 0.0,
+                            "FTH": 0.0,
+                            "ARC": 0.0
+                        }, {
+                            "STR": 1.051,
+                            "DEX": 1.051,
+                            "INT": 0.0,
+                            "FTH": 0.0,
+                            "ARC": 0.0
+                        }, {
+                            "STR": 1.080,
+                            "DEX": 1.080,
+                            "INT": 0.0,
+                            "FTH": 0.0,
+                            "ARC": 0.0
+                        }, {
+                            "STR": 1.109,
+                            "DEX": 1.109,
+                            "INT": 0.0,
+                            "FTH": 0.0,
+                            "ARC": 0.0
+                        }, {
+                            "STR": 1.138,
+                            "DEX": 1.138,
+                            "INT": 0.0,
+                            "FTH": 0.0,
+                            "ARC": 0.0
+                        }, {
+                            "STR": 1.167,
+                            "DEX": 1.167,
+                            "INT": 0.0,
+                            "FTH": 0.0,
+                            "ARC": 0.0
+                        }, {
+                            "STR": 1.196,
+                            "DEX": 1.196,
+                            "INT": 0.0,
+                            "FTH": 0.0,
+                            "ARC": 0.0
+                        }, {
+                            "STR": 1.225,
+                            "DEX": 1.225,
+                            "INT": 0.0,
+                            "FTH": 0.0,
+                            "ARC": 0.0
+                        }
+                    ],
                 "masks": {
                     "physical": {
-                        "STR": 1,
-                        "DEX": 1,
-                        "INT": 0,
-                        "FTH": 0,
-                        "ARC": 0
+                        "STR": True,
+                        "DEX": True,
+                        "INT": False,
+                        "FTH": False,
+                        "ARC": False
                     },
                     "magic": {
-                        "STR": 0,
-                        "DEX": 0,
-                        "INT": 1,
-                        "FTH": 0,
-                        "ARC": 0
+                        "STR": False,
+                        "DEX": False,
+                        "INT": True,
+                        "FTH": False,
+                        "ARC": False
                     },
                     "fire": {
-                        "STR": 0,
-                        "DEX": 0,
-                        "INT": 0,
-                        "FTH": 1,
-                        "ARC": 0
+                        "STR": False,
+                        "DEX": False,
+                        "INT": False,
+                        "FTH": True,
+                        "ARC": False
                     },
                     "lightning": {
-                        "STR": 0,
-                        "DEX": 1,
-                        "INT": 0,
-                        "FTH": 0,
-                        "ARC": 0
+                        "STR": False,
+                        "DEX": True,
+                        "INT": False,
+                        "FTH": False,
+                        "ARC": False
                     },
-                    "holy": { "STR": 0, "DEX": 0, "INT": 0, "FTH": 1, "ARC": 0 }
+                    "holy": { "STR": False, "DEX": False, "INT": False, "FTH": True, "ARC": False }
                 },
                 "corrections": {
                     "physical": "0",
@@ -512,9 +667,9 @@ def split_weapon_name(name):
 
 def to_mask(str):
     if str == "1":
-        return 1
+        return True
     else:
-        return 0
+        return False
 
 
 def process_weapon(row, masks, effects):
@@ -529,13 +684,15 @@ def process_weapon(row, masks, effects):
         "holy": int(row["attackBaseDark"]),
     }
 
-    scaling = {
-        "STR": float(row["correctStrength"]) / 100.0,
-        "DEX": float(row["correctAgility"]) / 100.0,
-        "INT": float(row["correctMagic"]) / 100.0,
-        "FTH": float(row["correctFaith"]) / 100.0,
-        "ARC": float(row["correctLuck"]) / 100.0,
-    }
+    scaling = []
+    for upgLevel in range(0, 26):
+        scaling.append({
+            "STR": float(row["correctStrength"]) / 100.0 * infusions[infusion]["statScalingRate"]["STR"][upgLevel],
+            "DEX": float(row["correctAgility"]) / 100.0 * infusions[infusion]["statScalingRate"]["DEX"][upgLevel],
+            "INT": float(row["correctMagic"]) / 100.0 * infusions[infusion]["statScalingRate"]["INT"][upgLevel],
+            "FTH": float(row["correctFaith"]) / 100.0 * infusions[infusion]["statScalingRate"]["FTH"][upgLevel],
+            "ARC": float(row["correctLuck"]) / 100.0 * infusions[infusion]["statScalingRate"]["ARC"][upgLevel],
+        })
 
     mask_id = row["attackElementCorrectId"]
     mask_row = masks[mask_id]
@@ -590,7 +747,10 @@ def process_weapon(row, masks, effects):
         "madness": row["correctType_Madness"], 
     }
 
+    paired = '1' in row["isDualBlade"]
     buffable = '1' in row["isEnhance"]
+    isGlinststoneStaff = '1' in row["enableMagic"]
+    isSacredSeal = '1' in row["enableMiracle"]
 
     # Auxiliary Effects (blood, poison)
     aux = {}
@@ -694,6 +854,10 @@ def process_weapon(row, masks, effects):
             weapon["unique"] = True
         else:
             weapon["unique"] = False
+        
+        weapon["paired"] = paired
+        weapon["glintstone-staff"] = isGlinststoneStaff
+        weapon["sacred-seal"] = isSacredSeal
 
         weapon["infusions"] = {}
         weapon["infusions"][infusion] = {
@@ -740,25 +904,12 @@ def extract_infusions(rows):
         lightning = [float(relevant[i]["thunderAtkRate"]) for i in range(0, 26)]
         holy = [float(relevant[i]["darkAtkRate"]) for i in range(0, 26)]
 
-        physical_upg, physical_dmg = regression(xs, physical)
-        magic_upg, magic_dmg = regression(xs, magic)
-        fire_upg, fire_dmg = regression(xs, fire)
-        lightning_upg, lightning_dmg = regression(xs, lightning)
-        holy_upg, holy_dmg = regression(xs, holy)
-
-        infusion["damage"] = {
-            "physical": physical_dmg,
-            "magic": magic_dmg,
-            "fire": fire_dmg,
-            "lightning": lightning_dmg,
-            "holy": holy_dmg,
-        }
-        infusion["upgrade"] = {
-            "physical": physical_upg,
-            "magic": magic_upg,
-            "fire": fire_upg,
-            "lightning": lightning_upg,
-            "holy": holy_upg,
+        infusion["damageUpgradeRate"] = {
+            "physical": physical,
+            "magic": magic,
+            "fire": fire,
+            "lightning": lightning,
+            "holy": holy,
         }
 
         # scaling
@@ -768,25 +919,12 @@ def extract_infusions(rows):
         faith = [float(relevant[i]["correctFaithRate"]) for i in range(0, 26)]
         arcane = [float(relevant[i]["correctLuckRate"]) for i in range(0, 26)]
 
-        str_growth, str_scaling = regression(xs, strength)
-        dex_growth, dex_scaling = regression(xs, dexterity)
-        int_growth, int_scaling = regression(xs, intelligence)
-        fth_growth, fth_scaling = regression(xs, faith)
-        arc_growth, arc_scaling = regression(xs, arcane)
-
-        infusion["scaling"] = {
-            "STR": str_scaling,
-            "DEX": dex_scaling,
-            "INT": int_scaling,
-            "FTH": fth_scaling,
-            "ARC": arc_scaling,
-        }
-        infusion["growth"] = {
-            "STR": str_growth,
-            "DEX": dex_growth,
-            "INT": int_growth,
-            "FTH": fth_growth,
-            "ARC": arc_growth,
+        infusion["statScalingRate"] = {
+            "STR": strength,
+            "DEX": dexterity,
+            "INT": intelligence,
+            "FTH": faith,
+            "ARC": arcane,
         }
 
         infusions[id] = infusion
@@ -797,31 +935,58 @@ def process_damage(caps):
         calculation = {}
 
         id = row["ID"]
-        calculation["id"] = id
+        # calculation["id"] = id
 
-        calculation["softcaps"] = [
-            int(row["stageMaxVal0"]),
-            int(row["stageMaxVal1"]),
-            int(row["stageMaxVal2"]),
-            int(row["stageMaxVal3"]),
-            int(row["stageMaxVal4"]),
-        ]
+        # calculation["softcaps"] = [
+        #     int(row["stageMaxVal0"]),
+        #     int(row["stageMaxVal1"]),
+        #     int(row["stageMaxVal2"]),
+        #     int(row["stageMaxVal3"]),
+        #     int(row["stageMaxVal4"]),
+        # ]
 
-        calculation["growth"] = [
-            int(row["stageMaxGrowVal0"]),
-            int(row["stageMaxGrowVal1"]),
-            int(row["stageMaxGrowVal2"]),
-            int(row["stageMaxGrowVal3"]),
-            int(row["stageMaxGrowVal4"]),
-        ]
+        # calculation["growth"] = [
+        #     int(row["stageMaxGrowVal0"]) / 100.0,
+        #     int(row["stageMaxGrowVal1"]) / 100.0,
+        #     int(row["stageMaxGrowVal2"]) / 100.0,
+        #     int(row["stageMaxGrowVal3"]) / 100.0,
+        #     int(row["stageMaxGrowVal4"]) / 100.0,
+        # ]
 
-        calculation["adjustments"] = [
-            float(row["adjPt_maxGrowVal0"]),
-            float(row["adjPt_maxGrowVal1"]),
-            float(row["adjPt_maxGrowVal2"]),
-            float(row["adjPt_maxGrowVal3"]),
-            float(row["adjPt_maxGrowVal4"]),
-        ]
+        # calculation["adjustments"] = [
+        #     float(row["adjPt_maxGrowVal0"]),
+        #     float(row["adjPt_maxGrowVal1"]),
+        #     float(row["adjPt_maxGrowVal2"]),
+        #     float(row["adjPt_maxGrowVal3"]),
+        #     float(row["adjPt_maxGrowVal4"]),
+        # ]
+
+        calculation = []
+        calculation.append({
+            "softcap": int(row["stageMaxVal0"]),
+            "growth": int(row["stageMaxGrowVal0"]) / 100.0,
+            "adjustment": float(row["adjPt_maxGrowVal0"]),
+        })
+        calculation.append({
+            "softcap": int(row["stageMaxVal1"]),
+            "growth": int(row["stageMaxGrowVal1"]) / 100.0,
+            "adjustment": float(row["adjPt_maxGrowVal1"]),
+        })
+        calculation.append({
+            "softcap": int(row["stageMaxVal2"]),
+            "growth": int(row["stageMaxGrowVal2"]) / 100.0,
+            "adjustment": float(row["adjPt_maxGrowVal2"]),
+        })
+        calculation.append({
+            "softcap": int(row["stageMaxVal3"]),
+            "growth": int(row["stageMaxGrowVal3"]) / 100.0,
+            "adjustment": float(row["adjPt_maxGrowVal3"]),
+        })
+        calculation.append({
+            "softcap": int(row["stageMaxVal4"]),
+            "growth": int(row["stageMaxGrowVal4"]) / 100.0,
+            "adjustment": float(row["adjPt_maxGrowVal4"]),
+        })
 
         calculations[id] = calculation
 

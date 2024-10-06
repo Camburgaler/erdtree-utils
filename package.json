@@ -1,0 +1,9 @@
+{
+    "scripts": {
+        "start": "python convert_params.py",
+        "format": "prettier --log-level warn --write \"**/*.{jsx,js,json,py}\""
+    },
+    "dependencies": {
+        "prettier": "^3.3.3"
+    }
+}
