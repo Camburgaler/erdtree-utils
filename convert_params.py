@@ -750,12 +750,34 @@ def extract_infusions(rows):
         lightning = [float(relevant[i]["thunderAtkRate"]) for i in range(0, 26)]
         holy = [float(relevant[i]["darkAtkRate"]) for i in range(0, 26)]
 
+        physical_upg, physical_dmg = regression(xs, physical)
+        magic_upg, magic_dmg = regression(xs, magic)
+        fire_upg, fire_dmg = regression(xs, fire)
+        lightning_upg, lightning_dmg = regression(xs, lightning)
+        holy_upg, holy_dmg = regression(xs, holy)
+
+
         infusion["damageUpgradeRate"] = {
-            "physical": physical,
-            "magic": magic,
-            "fire": fire,
-            "lightning": lightning,
-            "holy": holy,
+            "physical": {
+                "slope": physical_upg,
+                "intercept": physical_dmg,
+            },
+            "magic": {
+                "slope": magic_upg,
+                "intercept": magic_dmg,
+            },
+            "fire": {
+                "slope": fire_upg,
+                "intercept": fire_dmg,
+            },
+            "lightning": {
+                "slope": lightning_upg,
+                "intercept": lightning_dmg,
+            },
+            "holy": {
+                "slope": holy_upg,
+                "intercept": holy_dmg,
+            },
         }
 
         # scaling
