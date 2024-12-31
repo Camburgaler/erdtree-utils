@@ -203,7 +203,7 @@ def main():
     ):
 
         rows = list(csv.DictReader(wf, delimiter=","))
-        rows = [row for row in rows if 1000000 <= int(row["ID"]) <= 44010000 or 60500000 <= int(row["ID"]) <= 68510000]
+        rows = [row for row in rows if (1000000 <= int(row["ID"]) <= 44010000 or 60500000 <= int(row["ID"]) <= 68510000) and "[NPC]" not in row["Name"]]
 
         masks = list(csv.DictReader(af, delimiter=","))
         masks = {row["ID"]: row for row in masks}
