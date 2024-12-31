@@ -34,6 +34,7 @@ INFUSIONS = [
     "Blood ",
     "Cold ",
     "Occult ",
+    "Unique "
 ]
 
 WEAPON_CATEGORIES = {
@@ -218,6 +219,8 @@ def main():
         for row in rows:
             if not ignored(row):
                 process_weapon(row, masks, effects)
+        
+        prune_infusions()
 
         process_damage(softcaps)
 
@@ -293,7 +296,6 @@ def main():
             "name": "Unarmed",
             "requirements": {"STR": 0, "DEX": 0, "INT": 0, "FTH": 0, "ARC": 0},
             "category": "fist",
-            "unique": False,
             "paired": False,
             "glintstone-staff": False,
             "sacred-seal": False,
@@ -616,8 +618,6 @@ def process_weapon(row, masks, effects):
                     aux["madness"] = aux_id
             elif int(aux_id) > 100000:
                 aux_name = effects[aux_id]["Name"]
-                # standard_upgrade_effect_range = [x for x in range(0, 26)]
-                # standard_upgrade_effects = [effects[str(int(aux_id) + x)] for x in standard_upgrade_effect_range]
                 standard_upgrade_effects = [effects[aux_id], effects[str(int(aux_id) + 25)]]
 
                 if "Hemorrhage" in aux_name or int(effects[aux_id]["bloodAttackPower"]) > 0:
@@ -696,28 +696,74 @@ def process_weapon(row, masks, effects):
 
         weapon["category"] = WEAPON_CATEGORIES[int(row["ID"]) // 1000000]
 
-        if int(row["reinforceTypeId"]) == 2200:
-            weapon["unique"] = True
-        else:
-            weapon["unique"] = False
         
         weapon["paired"] = paired
         weapon["glintstone-staff"] = isGlinststoneStaff
         weapon["sacred-seal"] = isSacredSeal
 
-        weapon["infusions"] = {}
-        weapon["infusions"][infusion] = {
-            "id": infusion,
-            "damage": damage,
-            "scaling": scaling,
-            "aux": aux,
-            "masks": weapon_masks,
-            "corrections": corrections,
-            "buffable": buffable,
+        weapon["infusions"] = {
+            "standard": {},
+            "heavy": {},
+            "keen": {},
+            "quality": {},
+            "magic": {},
+            "fire": {},
+            "flame-art": {},
+            "lightning": {},
+            "sacred": {},
+            "poison": {},
+            "blood": {},
+            "cold": {},
+            "occult": {},
+            "unique": {},
         }
+        if int(row["reinforceTypeId"]) == 2200:
+            weapon["infusions"]["unique"] = {
+                "id": "unique",
+                "damage": damage,
+                "scaling": scaling,
+                "aux": aux,
+                "masks": weapon_masks,
+                "corrections": corrections,
+                "buffable": buffable,
+            }
+        else:
+            weapon["infusions"][infusion] = {
+                "id": infusion,
+                "damage": damage,
+                "scaling": scaling,
+                "aux": aux,
+                "masks": weapon_masks,
+                "corrections": corrections,
+                "buffable": buffable,
+            }
 
         weapons[id] = weapon
 
+
+def prune_infusions():
+    for weapon in weapons:
+        delInf = {
+            "standard": False,
+            "heavy": False,
+            "keen": False,
+            "quality": False,
+            "magic": False,
+            "fire": False,
+            "flame-art": False,
+            "lightning": False,
+            "sacred": False,
+            "poison": False,
+            "blood": False,
+            "cold": False,
+            "occult": False,
+        }
+        for infusion in weapons[weapon]["infusions"]:
+            if not weapons[weapon]["infusions"][infusion]:
+                delInf[infusion] = True
+        for infusion in delInf:
+            if delInf[infusion]:
+                del weapons[weapon]["infusions"][infusion]
 
 def regression(xs, ys):
     # least-squares sum regression
@@ -732,23 +778,28 @@ def regression(xs, ys):
 
 
 def extract_infusions(rows):
-    for i, ty in enumerate(INFUSIONS):
+    for ty in INFUSIONS:
         infusion = {}
         id = to_kebab(ty)
 
         infusion["id"] = id
         infusion["name"] = ty.strip()
 
-        relevant = [row for row in rows[0 + i + i * 25 : 26 + i + i * 25]]
+        upgRange = 26
+        if ty == "Unique ":
+            upgRange = 11
 
-        xs = [x for x in range(0, 26)]
+        xs = [x for x in range(0, upgRange)]
+        relevant = []
+        for x in xs:
+            relevant.append([row for row in rows if row["Name"] == ty + '+' + str(x)][0])
 
         # damage & upgrade
-        physical = [float(relevant[i]["physicsAtkRate"]) for i in range(0, 26)]
-        magic = [float(relevant[i]["magicAtkRate"]) for i in range(0, 26)]
-        fire = [float(relevant[i]["fireAtkRate"]) for i in range(0, 26)]
-        lightning = [float(relevant[i]["thunderAtkRate"]) for i in range(0, 26)]
-        holy = [float(relevant[i]["darkAtkRate"]) for i in range(0, 26)]
+        physical = [float(relevant[i]["physicsAtkRate"]) for i in range(0, upgRange)]
+        magic = [float(relevant[i]["magicAtkRate"]) for i in range(0, upgRange)]
+        fire = [float(relevant[i]["fireAtkRate"]) for i in range(0, upgRange)]
+        lightning = [float(relevant[i]["thunderAtkRate"]) for i in range(0, upgRange)]
+        holy = [float(relevant[i]["darkAtkRate"]) for i in range(0, upgRange)]
 
         physical_upg, physical_dmg = regression(xs, physical)
         magic_upg, magic_dmg = regression(xs, magic)
@@ -781,11 +832,11 @@ def extract_infusions(rows):
         }
 
         # scaling
-        strength = [float(relevant[i]["correctStrengthRate"]) for i in range(0, 26)]
-        dexterity = [float(relevant[i]["correctAgilityRate"]) for i in range(0, 26)]
-        intelligence = [float(relevant[i]["correctMagicRate"]) for i in range(0, 26)]
-        faith = [float(relevant[i]["correctFaithRate"]) for i in range(0, 26)]
-        arcane = [float(relevant[i]["correctLuckRate"]) for i in range(0, 26)]
+        strength = [float(relevant[i]["correctStrengthRate"]) for i in range(0, upgRange)]
+        dexterity = [float(relevant[i]["correctAgilityRate"]) for i in range(0, upgRange)]
+        intelligence = [float(relevant[i]["correctMagicRate"]) for i in range(0, upgRange)]
+        faith = [float(relevant[i]["correctFaithRate"]) for i in range(0, upgRange)]
+        arcane = [float(relevant[i]["correctLuckRate"]) for i in range(0, upgRange)]
 
         infusion["statScalingRate"] = {
             "STR": strength,

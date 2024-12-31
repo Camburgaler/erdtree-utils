@@ -136,6 +136,4 @@ IGNORED_WEAPON_INFUSIONS = [
     'lightning-perfume-bottle',
     'deadly-poison-perfume-bottle',
     'trolls-hammer'
-    # "fire-knights-greatsword",
-    # "fire-knights-shortsword"
 ]
