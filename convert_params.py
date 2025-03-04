@@ -244,7 +244,7 @@ def main():
             "id": "no-helmet",
             "name": "No helmet",
             "defenses": {"physical": 0, "strike": 0, "slash": 0, "pierce": 0, "magic": 0, "fire": 0, "lightning": 0, "holy": 0},
-            "resistances": {"poison": 0, "scarletRot": 0, "hemorrhage": 0, "frostbite": 0, "sleep": 0, "madness": 0, "deathBlight": 0},
+            "resistances": {"poison": 0, "scarlet-rot": 0, "hemorrhage": 0, "frostbite": 0, "sleep": 0, "madness": 0, "death-blight": 0},
             "poise": 0,
             "weight": 0,
         },
@@ -255,7 +255,7 @@ def main():
             "id": "no-chestpiece",
             "name": "No chestpiece",
             "defenses": {"physical": 0, "strike": 0, "slash": 0, "pierce": 0, "magic": 0, "fire": 0, "lightning": 0, "holy": 0},
-            "resistances": {"poison": 0, "scarletRot": 0, "hemorrhage": 0, "frostbite": 0, "sleep": 0, "madness": 0, "deathBlight": 0},
+            "resistances": {"poison": 0, "scarlet-rot": 0, "hemorrhage": 0, "frostbite": 0, "sleep": 0, "madness": 0, "death-blight": 0},
             "poise": 0,
             "weight": 0,
         },
@@ -266,7 +266,7 @@ def main():
             "id": "no-gauntlets",
             "name": "No gauntlets",
             "defenses": {"physical": 0, "strike": 0, "slash": 0, "pierce": 0, "magic": 0, "fire": 0, "lightning": 0, "holy": 0},
-            "resistances": {"poison": 0, "scarletRot": 0, "hemorrhage": 0, "frostbite": 0, "sleep": 0, "madness": 0, "deathBlight": 0},
+            "resistances": {"poison": 0, "scarlet-rot": 0, "hemorrhage": 0, "frostbite": 0, "sleep": 0, "madness": 0, "death-blight": 0},
             "poise": 0,
             "weight": 0,
         },
@@ -277,7 +277,7 @@ def main():
             "id": "no-leggings",
             "name": "No leggings",
             "defenses": {"physical": 0, "strike": 0, "slash": 0, "pierce": 0, "magic": 0, "fire": 0, "lightning": 0, "holy": 0},
-            "resistances": {"poison": 0, "scarletRot": 0, "hemorrhage": 0, "frostbite": 0, "sleep": 0, "madness": 0, "deathBlight": 0},
+            "resistances": {"poison": 0, "scarlet-rot": 0, "hemorrhage": 0, "frostbite": 0, "sleep": 0, "madness": 0, "death-blight": 0},
             "poise": 0,
             "weight": 0,
         },
@@ -430,13 +430,13 @@ def process_armor_piece(row):
     item["defenses"]["holy"] = round((1.0 - float(row["darkDamageCutRate"])) * 100.0, 2); # Holy Absorption
 
     item["resistances"] = {};
-    item["resistances"]["scarletRot"] = int(row["resistDisease"]); # Scarlet Rot Resistance
+    item["resistances"]["scarlet-rot"] = int(row["resistDisease"]); # Scarlet Rot Resistance
     item["resistances"]["poison"] = int(row["resistPoison"]); # Poison Resistance
     item["resistances"]["hemorrhage"] = int(row["resistBlood"]); # Hemorrhage Resistance
     item["resistances"]["frostbite"] = int(row["resistFreeze"]); # Frostbite Resistance
     item["resistances"]["sleep"] = int(row["resistSleep"]); # Sleep Resistance
     item["resistances"]["madness"] = int(row["resistMadness"]); # Madness Resistance
-    item["resistances"]["deathBlight"] = int(row["resistCurse"]); # Death Blight Resistance
+    item["resistances"]["death-blight"] = int(row["resistCurse"]); # Death Blight Resistance
 
     item["poise"] = int(round(float(row["toughnessCorrectRate"]) * 1000.0, 2)) # Poise
     item["weight"] = round(float(row["weight"]), 2)
