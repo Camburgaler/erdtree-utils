@@ -694,7 +694,8 @@ def process_weapon(row, masks, effects):
             "ARC": int(row["properLuck"]), # ARC
         }
 
-        weapon["category"] = WEAPON_CATEGORIES[int(row["ID"]) // 1000000]
+        if row["Name"] == "Shield of Night": weapon["category"] = "small-shield"
+        else: weapon["category"] = WEAPON_CATEGORIES[int(row["ID"]) // 1000000]
 
         
         weapon["paired"] = paired
