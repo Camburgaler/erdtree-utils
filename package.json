@@ -4,6 +4,6 @@
         "format": "prettier --log-level warn --write \"**/*.{jsx,js,json,py}\""
     },
     "dependencies": {
-        "prettier": "^3.3.3"
+        "prettier": "^3.7.4"
     }
 }
