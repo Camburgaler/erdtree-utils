@@ -186,6 +186,18 @@ def main():
             "level": 1,
             "stats": {"VIG": 10, "MND": 10, "END": 10, "STR": 10, "DEX": 10, "INT": 10, "FTH": 10, "ARC": 10},
         },
+        {
+            "id": "idus-knight",
+            "name": "Idus Knight",
+            "level": 7,
+            "stats": {"VIG": 10, "MND": 12, "END": 11, "STR": 13, "DEX": 15, "INT": 8, "FTH": 11, "ARC": 6},
+        },
+        {
+            "id": "heavy-knight",
+            "name": "Heavy Knight",
+            "level": 10,
+            "stats": {"VIG": 14, "MND": 8, "END": 17, "STR": 15, "DEX": 11, "INT": 7, "FTH": 8, "ARC": 9},
+        }
     ]
 
     # infusions
@@ -203,7 +215,7 @@ def main():
     ):
 
         rows = list(csv.DictReader(wf, delimiter=","))
-        rows = [row for row in rows if (1000000 <= int(row["ID"]) <= 44010000 or 60500000 <= int(row["ID"]) <= 68510000) and "[NPC]" not in row["Name"]]
+        rows = [row for row in rows if (1000000 <= int(row["ID"]) <= 44500000 or 60500000 <= int(row["ID"]) <= 68510000) and "[NPC]" not in row["Name"]]
 
         masks = list(csv.DictReader(af, delimiter=","))
         masks = {row["ID"]: row for row in masks}
@@ -604,6 +616,8 @@ def process_weapon(row, masks, effects):
     aux = {}
     for aux_id in [row["spEffectBehaviorId0"], row["spEffectBehaviorId1"]]:
         if int(aux_id) != -1:
+            type = None
+
             if int(aux_id) > 5000000:
                 aux_name = effects[aux_id]["Name"]
                 if "Hemorrhage" in aux_name:
@@ -641,10 +655,14 @@ def process_weapon(row, masks, effects):
                 elif "Blight" in aux_name:
                     type = "blight"
                     standard_upgrade_effects = [int(y["curseAttackPower"]) for y in standard_upgrade_effects]
-                aux[type] = standard_upgrade_effects
-            elif int(aux_id) <= 100000:
+
+                if type is not None:
+                    aux[type] = standard_upgrade_effects
+            else:
+                base = 0
                 aux_name = effects[aux_id]["Name"]
-                if "Hemorrhage" in aux_name:
+
+                if "Blood Loss" in aux_name:
                     type = "blood"
                     base = effects[aux_id]["bloodAttackPower"]
                 elif "Frostbite" in aux_name:
@@ -665,7 +683,9 @@ def process_weapon(row, masks, effects):
                 elif "Blight" in aux_name:
                     type = "blight"
                     base = effects[aux_id]["curseAttackPower"]
-                aux[type] = [int(base), int(base)]
+
+                if type is not None:
+                    aux[type] = [int(base), int(base)]
 
     if id in weapons:
         if not id in IGNORED_WEAPON_INFUSIONS:
